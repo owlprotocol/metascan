@@ -1,44 +1,76 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Starter Project
+Built with https://www.sitepoint.com/react-with-typescript-best-practices/
 
-## Available Scripts
+Leo's React starter project.
+After working on many React projects, I've decided to fork all new projects from this starter repo. Created with create-react-app + additional features using eslint + flow. Husky enables pre-commit formatting/tests ensuring consistent styling. Also featured quick deployment using gh-pages.
 
-In the project directory, you can run:
+## Getting Started
 
-### `yarn start`
+## Installing
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+If you are new to React follow these steps.
+To install all required dependencies.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```
+$ yarn
+```
 
-### `yarn test`
+## Cloning
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To clone this starter repo and add it as an upstream folow below:
 
-### `yarn build`
+```
+$ git clone https://github.com/leovigna/react-starter-ts.git myproject
+$ cd myproject
+$ git remote set-url origin https://github.com/leovigna/myproject.git
+$ git remote add upstream https://github.com/leovigna/react-starter-ts.git
+$ git push origin master
+$ git push --all
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then to sync any new changes form this repo to the new repo follow [this](https://help.github.com/en/articles/syncing-a-fork):
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+$ git fetch upstream
+$ git checkout master
+$ git merge upstream/master
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Dependencies
 
-### `yarn eject`
+Install dependencies, including devDependencies.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+$ yarn -D
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [Husky](https://github.com/typicode/husky) - Prevent bad commits
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Testing
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+$ yarn test
+```
 
-## Learn More
+### Deployment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+$ yarn deploy
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Codestyle
+
+```
+$ yarn lint
+```
+
+### Also used
+
+## Contributing
+
+To contribute code, feel free to fork this repo.
+
+## License
+
+2019 Leo Vigna
+MIT License.
