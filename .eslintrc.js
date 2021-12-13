@@ -7,8 +7,9 @@ module.exports = {
         'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
         'plugin:prettier/recommended',
+        'plugin:import/typescript',
     ],
-    plugins: ['@typescript-eslint', 'prettier'],
+    plugins: ['@typescript-eslint', 'import', 'react-hooks'],
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
         sourceType: 'module', // Allows for the use of imports
@@ -20,10 +21,13 @@ module.exports = {
         semi: 0,
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single'],
-        'no-console': 'warn',
+        'no-console': 'off',
         'no-unused-vars': 'off',
         'no-empty': 'warn',
+        'import/no-named-as-default': 'off',
         'import/no-anonymous-default-export': 'off',
+        'import/no-cycle': 'error',
+        'import/no-self-import': 'error',
         '@typescript-eslint/no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -37,6 +41,8 @@ module.exports = {
             },
         ],
         'react/prop-types': 0,
+        'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+        'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
     },
     settings: {
         react: {
