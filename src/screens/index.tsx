@@ -1,3 +1,3 @@
-import BlockPage from './BlockPage';
+import BlocksPage from './BlocksPage';
 
-export { BlockPage };
+export { BlocksPage };

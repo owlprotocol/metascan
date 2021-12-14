@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { BlockPage } from './screens';
+import { BlocksPage } from './screens';
 
 //import ReactGA from 'react-ga';
 
@@ -15,9 +15,12 @@ function App() {
                         <Route path="/home">
                             <p>Home</p>
                         </Route>
-                        <Route path="/block/:blockNumber">
-                            <BlockPage />
+                        <Route path="/blocks">
+                            <BlocksPage />
                         </Route>
+                        {/* <Route path="/block/:blockNumber">
+                            <BlockPage />
+                        </Route> */}
                     </Switch>
                 </BrowserRouter>
             </header>

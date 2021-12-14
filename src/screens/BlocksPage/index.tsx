@@ -14,7 +14,7 @@ const Headline = styled.div`
 
 const Wrapper = styled.div``;
 
-const BlockPage = () => {
+const BlocksPage = () => {
     return (
         <Wrapper>
             <Headline>
@@ -28,7 +28,7 @@ const BlockPage = () => {
                         fill="#F5F5F5"
                     />
                 </svg>
-                Ethereum Block
+                Ethereum Blocks
             </Headline>
 
             <Table data={[]} />
@@ -36,4 +36,4 @@ const BlockPage = () => {
     );
 };
 
-export default BlockPage;
+export default BlocksPage;

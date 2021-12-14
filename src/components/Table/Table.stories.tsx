@@ -11,7 +11,7 @@ export default {
     component: Table,
 } as ComponentMeta<typeof Table>;
 
-const Template: ComponentStory<typeof Table> = (args: Props) => <Wrapper {...args} />;
+const Template: ComponentStory<typeof Table> = (args: any) => <Wrapper {...args} />;
 
 export const Main = Template.bind({});
 

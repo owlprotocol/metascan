@@ -38,8 +38,19 @@ const Wrapper = styled.div`
     }
 `;
 
+interface BlockItem {
+    block: string;
+    age: string;
+    txn: string;
+    uncles: string;
+    miner: string;
+    'gas used': string;
+    'gas limit': string;
+    'base fee': string;
+}
+
 export interface Props {
-    data?: [];
+    data?: BlockItem[];
 }
 
 const HEADER_LABELS = ['block', 'age', 'txn', 'uncles', 'miner', 'gas used', 'gas limit', 'base fee'];
@@ -56,11 +67,12 @@ const Table = ({ data }: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item, key) => {
+                    {data?.map((item: BlockItem, key) => {
                         return (
                             <tr key={key}>
                                 {HEADER_LABELS.map((label, key) => (
                                     <th scope="row" key={key}>
+                                        {/* @ts-ignore */}
                                         {item[label]}
                                     </th>
                                 ))}

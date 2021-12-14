@@ -4,6 +4,7 @@ import getDisplayName from './getDisplayName';
 
 const withThemeProvider = (WrappedComponent: any) => {
     const component = (props: string) => (
+        //@ts-ignore
         <ThemeProvider theme={THEME_COLORS[props.theme] ?? THEME_COLORS.light}>
             <WrappedComponent {...props} />
         </ThemeProvider>
