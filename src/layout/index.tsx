@@ -2,14 +2,17 @@ import Header from './Header';
 import Footer from './Footer';
 import styled from 'styled-components';
 
-const Wrapper = styled.div``;
+const Content = styled.div`
+    background: #fafafa;
+    min-height: 80vh;
+`;
 
 const LayoutWrapper = ({ children }: any) => (
-    <Wrapper>
+    <>
         <Header />
-        {children}
+        <Content>{children}</Content>
         <Footer />
-    </Wrapper>
+    </>
 );
 
 export default LayoutWrapper;

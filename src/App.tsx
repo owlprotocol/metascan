@@ -1,5 +1,8 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LayoutWrapper from './layout';
 import { BlocksPage } from './screens';
+import { ThemeProvider } from 'styled-components';
+import { THEME_COLORS } from './constants';
 
 //import ReactGA from 'react-ga';
 
@@ -9,21 +12,23 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
+            <ThemeProvider theme={THEME_COLORS['light']}>
                 <BrowserRouter>
                     <Switch>
-                        <Route path="/home">
-                            <p>Home</p>
-                        </Route>
-                        <Route path="/blocks">
-                            <BlocksPage />
-                        </Route>
-                        {/* <Route path="/block/:blockNumber">
-                            <BlockPage />
-                        </Route> */}
+                        <LayoutWrapper>
+                            <Route path="/home">
+                                <p>Home</p>
+                            </Route>
+                            <Route path="/blocks">
+                                <BlocksPage />
+                            </Route>
+                            {/* <Route path="/block/:blockNumber">
+                                <BlockPage />
+                            </Route> */}
+                        </LayoutWrapper>
                     </Switch>
                 </BrowserRouter>
-            </header>
+            </ThemeProvider>
         </div>
     );
 }
