@@ -1,0 +1,30 @@
+body {
+    background-color: #fafafa;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #000000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: transparent;
+    border: 0;
+    color: #fff;
+    padding: 0;
+}
+
+button:focus {
+    outline: none;
+}
+
+.container-fluid {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.row {
+    margin: 0;
+}

@@ -1,8 +1,7 @@
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
-//import ReactGA from 'react-ga';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BlocksPage } from './screens';
 
-import logo from './logo.svg';
-import './App.css';
+//import ReactGA from 'react-ga';
 
 function App() {
     //ReactGA.initialize('UA-000000-01');
@@ -11,22 +10,19 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <HashRouter>
+                <BrowserRouter>
                     <Switch>
-                        <Route path="/home" render={() => <p>Home</p>} />
-                        <Route path="/hello" render={() => <p>Hello World!</p>} />
-                        <Route path="/">
-                            <Redirect to="/home" />
+                        <Route path="/home">
+                            <p>Home</p>
                         </Route>
+                        <Route path="/blocks">
+                            <BlocksPage />
+                        </Route>
+                        {/* <Route path="/block/:blockNumber">
+                            <BlockPage />
+                        </Route> */}
                     </Switch>
-                </HashRouter>
-                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                    Learn React
-                </a>
+                </BrowserRouter>
             </header>
         </div>
     );

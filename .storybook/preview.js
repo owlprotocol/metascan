@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 
-//Import shared CSS
-//import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../src/styles/index.css';
 
 export const parameters = {
     actions: {
@@ -18,7 +18,7 @@ export const parameters = {
         values: [
             {
                 name: 'main',
-                value: '#252525',
+                value: '#FAFAFA',
             },
         ]
     }
