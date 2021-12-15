@@ -1,3 +1,5 @@
 import Table from './Table';
+import SearchBar from './SearchBar';
+import TokenCard from './TokenCard';
 
-export { Table };
+export { Table, SearchBar, TokenCard };

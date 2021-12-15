@@ -1,0 +1,203 @@
+import styled from 'styled-components';
+import { SearchBar, TokenCard } from '../../components';
+import { NavLink } from 'react-router-dom';
+import { Container } from 'reactstrap';
+import { ReactComponent as ArrowRightIcon } from '../../icons/arrowRight.svg';
+
+const HeroWrapper = styled.div`
+    background: #fafafa;
+    min-height: 700px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+`;
+
+const SmallTitle = styled.div`
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 36px;
+    color: #737373;
+    text-transform: uppercase;
+`;
+
+const Headline = styled.div`
+    font-weight: 800;
+    font-size: 50px;
+    line-height: 70px;
+    letter-spacing: 0.2px;
+    color: #252b42;
+    margin: 20px 0;
+
+    span {
+        background: linear-gradient(39.97deg, #00f3b9 0.79%, #2187ff 79.29%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+`;
+
+const SubText = styled.div`
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 38px;
+    letter-spacing: 0.2px;
+    color: #737373;
+`;
+
+const SearchBarWrapper = styled.div`
+    width: 100%;
+    max-width: 930px;
+    margin: 50px auto 0;
+`;
+
+const SectionWrapper = styled.div`
+    margin: 20px auto 0;
+
+    &:not(:last-of-type) {
+        margin-bottom: 70px;
+    }
+`;
+
+const SectionHeader = styled.div`
+    font-weight: bold;
+    letter-spacing: 0.2px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 850px;
+    margin: 40px auto;
+
+    span {
+        font-size: 36px;
+        line-height: 57px;
+        color: #000000;
+    }
+
+    a {
+        font-size: 18px;
+        line-height: 28px;
+        color: #2091f9;
+        text-decoration: none;
+    }
+`;
+
+const TokenListWrapper = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 60px;
+    justify-items: center;
+    align-items: center;
+    padding: 20px 0 60px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+`;
+
+const Wrapper = styled.div``;
+
+const LandingPage = () => {
+    const STUB_TOKEN_LIST = [
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+        {
+            token: 'Bitcoin',
+            price: '$57,980',
+            change: '+2%',
+            blocks: '807,900',
+            txs: '900,111,000',
+        },
+    ];
+
+    return (
+        <Wrapper>
+            <HeroWrapper>
+                <div>
+                    <SmallTitle>metascan</SmallTitle>
+                    <Headline>
+                        Blockchain explorers <br />
+                        <span>analytics and more</span>
+                    </Headline>
+                    <SubText>A universal EVM blockchain explorer</SubText>
+                </div>
+
+                <div>
+                    <SearchBarWrapper>
+                        <SearchBar />
+                    </SearchBarWrapper>
+                </div>
+            </HeroWrapper>
+
+            <Container fluid>
+                <SectionWrapper>
+                    <SectionHeader>
+                        <span>Blockchains</span>
+                        <NavLink to="/see-more">
+                            See More &nbsp;&nbsp;
+                            <ArrowRightIcon />
+                        </NavLink>
+                    </SectionHeader>
+
+                    <TokenListWrapper>
+                        {STUB_TOKEN_LIST.map((token, key) => (
+                            <TokenCard {...token} key={key} />
+                        ))}
+                    </TokenListWrapper>
+                </SectionWrapper>
+
+                <SectionWrapper>
+                    <SectionHeader>
+                        <span>Tokens</span>
+                        <NavLink to="/see-more">
+                            See More &nbsp;&nbsp;
+                            <ArrowRightIcon />
+                        </NavLink>
+                    </SectionHeader>
+
+                    <TokenListWrapper>
+                        <TokenCard token="Ethereum" />
+                        <TokenCard token="USDC" />
+                        <TokenCard token="Solana" />
+                    </TokenListWrapper>
+                </SectionWrapper>
+            </Container>
+        </Wrapper>
+    );
+};
+
+export default LandingPage;

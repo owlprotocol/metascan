@@ -28,3 +28,17 @@ button:focus {
 .row {
     margin: 0;
 }
+
+::-webkit-input-placeholder {
+    /* Edge */
+    color: #b4b4b4;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #b4b4b4;
+}
+
+::placeholder {
+    color: #b4b4b4;
+}

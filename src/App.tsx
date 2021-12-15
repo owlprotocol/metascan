@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LayoutWrapper from './layout';
-import { BlocksPage } from './screens';
+import { LandingPage, BlocksPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
 
@@ -16,8 +16,8 @@ function App() {
                 <BrowserRouter>
                     <Switch>
                         <LayoutWrapper>
-                            <Route path="/home">
-                                <p>Home</p>
+                            <Route path="/">
+                                <LandingPage />
                             </Route>
                             <Route path="/blocks">
                                 <BlocksPage />
