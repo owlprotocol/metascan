@@ -3,7 +3,7 @@ import Footer from './Footer';
 import styled from 'styled-components';
 
 const Content = styled.div`
-    background: #fafafa;
+    background: #fff;
     min-height: 80vh;
 `;
 
