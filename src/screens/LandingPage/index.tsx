@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import { SearchBar, TokenCard } from '../../components';
 import { NavLink } from 'react-router-dom';
-import { Container } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { ReactComponent as ArrowRightIcon } from '../../icons/arrowRight.svg';
+import { NAV_LINKS, STUB_TOKEN_LIST } from '../../constants';
 
 const HeroWrapper = styled.div`
+    font-family: 'Montserrat', sans-serif;
     background: #fafafa;
     min-height: 700px;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-family: 'Montserrat', sans-serif;
 `;
 
 const SmallTitle = styled.div`
@@ -84,6 +85,9 @@ const SectionHeader = styled.div`
 
 const TokenListWrapper = styled.div`
     display: grid;
+    /*  Note: FOR MOBILE USE
+        grid-template-columns: repeat(1, 1fr);
+    */
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 0px;
@@ -96,54 +100,37 @@ const TokenListWrapper = styled.div`
     margin: 0 auto;
 `;
 
+const Navigation = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+
+    a {
+        color: #70797b;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        text-align: center;
+        letter-spacing: 0.2px;
+        margin: 0 12px;
+        text-decoration: none;
+        border-radius: 50px;
+        padding: 6px 22px;
+        transition: 300ms;
+        text-transform: capitalize;
+
+        &:hover {
+            background: #2090f960;
+            color: #000;
+        }
+    }
+`;
+
 const Wrapper = styled.div``;
 
 const LandingPage = () => {
-    const STUB_TOKEN_LIST = [
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-        {
-            token: 'Bitcoin',
-            price: '$57,980',
-            change: '+2%',
-            blocks: '807,900',
-            txs: '900,111,000',
-        },
-    ];
-
     return (
         <Wrapper>
             <HeroWrapper>
@@ -164,21 +151,31 @@ const LandingPage = () => {
             </HeroWrapper>
 
             <Container fluid>
-                <SectionWrapper>
-                    <SectionHeader>
-                        <span>Blockchains</span>
-                        <NavLink to="/see-more">
-                            See More &nbsp;&nbsp;
-                            <ArrowRightIcon />
+                <Navigation>
+                    {NAV_LINKS.map((link, key) => (
+                        <NavLink to={link.href} key={key}>
+                            {link.label}
                         </NavLink>
-                    </SectionHeader>
+                    ))}
+                </Navigation>
 
-                    <TokenListWrapper>
-                        {STUB_TOKEN_LIST.map((token, key) => (
-                            <TokenCard {...token} key={key} />
-                        ))}
-                    </TokenListWrapper>
-                </SectionWrapper>
+                <Row>
+                    <SectionWrapper>
+                        <SectionHeader>
+                            <span>Blockchains</span>
+                            <NavLink to="/see-more">
+                                See More &nbsp;&nbsp;
+                                <ArrowRightIcon />
+                            </NavLink>
+                        </SectionHeader>
+
+                        <TokenListWrapper>
+                            {STUB_TOKEN_LIST.map((token, key) => (
+                                <TokenCard {...token} key={key} />
+                            ))}
+                        </TokenListWrapper>
+                    </SectionWrapper>
+                </Row>
 
                 <SectionWrapper>
                     <SectionHeader>
