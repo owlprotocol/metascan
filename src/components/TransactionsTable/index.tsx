@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Table as ReactstrapTable } from 'reactstrap';
+import { shortenHash } from '../../utils';
 
 const Wrapper = styled.div`
     .table {
@@ -37,23 +38,36 @@ const Wrapper = styled.div`
 `;
 
 interface BlockItem {
+    hash: string;
+    method: string;
     block: string;
     age: string;
-    txn: string;
-    uncles: string;
-    miner: string;
-    'gas used': string;
-    'gas limit': string;
-    'base fee': string;
+    from: string;
+    to: string;
+    value: string;
+    'txn fee': string;
 }
 
 export interface Props {
     data?: BlockItem[];
 }
 
-const HEADER_LABELS = ['block', 'age', 'txn', 'uncles', 'miner', 'gas used', 'gas limit', 'base fee'];
+const HEADER_LABELS = ['hash', 'method', 'block', 'age', 'from', 'to', 'value', 'txn fee'];
 
-const Table = ({ data }: Props) => {
+const TransactionsTable = ({ data }: Props) => {
+    const tableData = (item: BlockItem, label: string) => {
+        // @ts-ignore
+        let data = item[label];
+
+        switch (label) {
+            case 'hash':
+            case 'from':
+                data = shortenHash(item[label]);
+        }
+
+        return data;
+    };
+
     return (
         <Wrapper>
             <ReactstrapTable responsive>
@@ -70,8 +84,7 @@ const Table = ({ data }: Props) => {
                             <tr key={key}>
                                 {HEADER_LABELS.map((label, key) => (
                                     <th scope="row" key={key}>
-                                        {/* @ts-ignore */}
-                                        {item[label]}
+                                        {tableData(item, label)}
                                     </th>
                                 ))}
                             </tr>
@@ -89,4 +102,4 @@ const Table = ({ data }: Props) => {
     );
 };
 
-export default Table;
+export default TransactionsTable;

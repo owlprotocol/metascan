@@ -24,7 +24,11 @@ const FlexWrapper = styled.div`
     justify-content: space-between;
 `;
 
-const AddressBar = ({ address }: any) => {
+interface Props {
+    address: string;
+}
+
+const AddressBar = ({ address }: Props) => {
     const handleClickToCopy = () => {
         navigator.clipboard.writeText(address);
     };

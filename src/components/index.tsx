@@ -1,6 +1,5 @@
-import Table from './Table';
-import SearchBar from './SearchBar';
-import TokenCard from './TokenCard';
-import AddressBar from './AddressBar';
-
-export { Table, SearchBar, TokenCard, AddressBar };
+export { default as Table } from './Table';
+export { default as SearchBar } from './SearchBar';
+export { default as TokenCard } from './TokenCard';
+export { default as AddressBar } from './AddressBar';
+export { default as TransactionsTable } from './TransactionsTable';
