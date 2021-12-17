@@ -1,6 +1,7 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import LayoutWrapper from './layout';
-import { LandingPage, BlocksPage } from './screens';
+import { LandingPage, BlocksPage, AccountPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
 
@@ -13,21 +14,25 @@ function App() {
     return (
         <div className="App">
             <ThemeProvider theme={THEME_COLORS['light']}>
-                <BrowserRouter>
+                <Router>
                     <Switch>
                         <LayoutWrapper>
-                            <Route path="/">
+                            {/* @ts-ignore */}
+                            <Route exact={true} path="/">
                                 <LandingPage />
                             </Route>
                             <Route path="/blocks">
                                 <BlocksPage />
+                            </Route>
+                            <Route path="/account">
+                                <AccountPage />
                             </Route>
                             {/* <Route path="/block/:blockNumber">
                                 <BlockPage />
                             </Route> */}
                         </LayoutWrapper>
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </ThemeProvider>
         </div>
     );

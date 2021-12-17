@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Container, Row } from 'reactstrap';
 import { ReactComponent as ArrowRightIcon } from '../../icons/arrowRight.svg';
 import { NAV_LINKS, STUB_TOKEN_LIST } from '../../constants';
+import { NavigationWrapper } from '../../styles/Common';
 
 const HeroWrapper = styled.div`
     font-family: 'Montserrat', sans-serif;
@@ -100,33 +101,7 @@ const TokenListWrapper = styled.div`
     margin: 0 auto;
 `;
 
-const Navigation = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 0;
-    margin-bottom: 30px;
-
-    a {
-        color: #70797b;
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 28px;
-        text-align: center;
-        letter-spacing: 0.2px;
-        margin: 0 12px;
-        text-decoration: none;
-        border-radius: 50px;
-        padding: 6px 22px;
-        transition: 300ms;
-        text-transform: capitalize;
-
-        &:hover {
-            background: #2090f960;
-            color: #000;
-        }
-    }
-`;
+const Navigation = styled(NavigationWrapper)``;
 
 const Wrapper = styled.div``;
 

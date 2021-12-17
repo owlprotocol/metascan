@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const Wrapper = styled.div`
     background-color: ${(props) => props.theme.primary};
-    height: 100px;
+    height: ${(props: any) => props.height};
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,27 +60,33 @@ const PrefsButton = styled.div`
     }
 `;
 
-const Header = () => (
-    <Wrapper>
-        <div>
-            <NavLink to="/">Logo</NavLink>
-        </div>
-        <div>
-            <nav>
-                <NavLink to="/Blockchains">Blockchains</NavLink>
-                <NavLink to="/Products">Products</NavLink>
-                <NavLink to="/Resources">Resources</NavLink>
-                <NavLink to="/More">More</NavLink>
-            </nav>
+const Header = () => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
-            <PrefsButton>
-                <span>eng</span>
-                <span>usd</span>
-            </PrefsButton>
+    return (
+        // @ts-ignore
+        <Wrapper className="layout-header" height={isHomePage ? '100px' : '150px'}>
+            <div>
+                <NavLink to="/">Logo</NavLink>
+            </div>
+            <div>
+                <nav>
+                    <NavLink to="/Blockchains">Blockchains</NavLink>
+                    <NavLink to="/Products">Products</NavLink>
+                    <NavLink to="/Resources">Resources</NavLink>
+                    <NavLink to="/More">More</NavLink>
+                </nav>
 
-            <ButtonLink to="/login">Login</ButtonLink>
-        </div>
-    </Wrapper>
-);
+                <PrefsButton>
+                    <span>eng</span>
+                    <span>usd</span>
+                </PrefsButton>
+
+                <ButtonLink to="/login">Login</ButtonLink>
+            </div>
+        </Wrapper>
+    );
+};
 
 export default Header;

@@ -12,6 +12,17 @@ body {
     box-sizing: border-box;
 }
 
+select {
+    width: 100%;
+    height: 33px;
+    border: 1px solid #70797b;
+    color: #70797b;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: transparent;
+    padding-left: 3px;
+}
+
 button {
     background-color: transparent;
     border: 0;
@@ -45,4 +56,9 @@ button:focus {
 
 ::placeholder {
     color: #b4b4b4;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
 }
