@@ -3,12 +3,14 @@ import LayoutWrapper from './layout';
 import { LandingPage, BlocksPage, AccountPage, TransactionPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
+import useApp from './hooks/index';
 
 //import ReactGA from 'react-ga';
 
 function App() {
     //ReactGA.initialize('UA-000000-01');
     //ReactGA.pageview(window.location.pathname + window.location.search);
+    useApp();
 
     return (
         <div className="App">
