@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import copy from 'copy-to-clipboard';
 
 const Wrapper = styled.div`
     display: inline-block;
@@ -10,7 +11,7 @@ const Wrapper = styled.div`
 
 const CopyToClipboard = ({ text }: any) => {
     const handleClick = () => {
-        text ?? navigator.clipboard.writeText(text || '');
+        copy(text);
     };
 
     return (

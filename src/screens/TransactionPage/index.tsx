@@ -174,6 +174,16 @@ const TxnStatusWrapper = styled.div`
     border-radius: 12px;
     padding: 12px 20px;
 
+    > div:last-of-type {
+        display: flex;
+        align-items: center;
+        margin-top: 6px;
+
+        svg {
+            margin-right: 6px;
+        }
+    }
+
     .confirmed-text {
         color: #3f484a;
         font-weight: 500;
@@ -207,19 +217,6 @@ const TransactionPage = ({
 }: Props) => {
     const params = useParams();
     const { txnHash } = params;
-
-    // const tableData = [
-    //     {
-    //         hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-    //         method: 'approve',
-    //         block: '1345711',
-    //         age: '6 days 10 hrs ago	',
-    //         from: '0x23908928b70d0b638d0f7544528538c78a6',
-    //         to: 'ENS: ENS Token',
-    //         value: '1 Ether',
-    //         'txn fee': '0.001913048528',
-    //     },
-    // ];
 
     return (
         <Wrapper>

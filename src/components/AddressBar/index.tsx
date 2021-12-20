@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import copy from 'copy-to-clipboard';
 
 const Wrapper = styled.div`
     background: #cde7ec;
@@ -36,7 +37,7 @@ interface Props {
 
 const AddressBar = ({ address, title = 'Address', hasQR = false }: Props) => {
     const handleClickToCopy = () => {
-        address ?? navigator.clipboard.writeText(address || '');
+        copy(String(address));
     };
 
     return (
