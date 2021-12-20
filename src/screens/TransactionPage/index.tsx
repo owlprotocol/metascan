@@ -216,6 +216,9 @@ const TransactionPage = ({
     txFee = '0.05',
 }: Props) => {
     const params = useParams();
+
+    // Deploy throws on: Property 'txnHash' does not exist on type '{}'.  TS2339
+    // @ts-ignore
     const { txnHash } = params;
 
     return (
