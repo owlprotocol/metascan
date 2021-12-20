@@ -1,5 +1,4 @@
-import LandingPage from './LandingPage';
-import BlocksPage from './BlocksPage';
-import AccountPage from './AccountPage';
-
-export { LandingPage, BlocksPage, AccountPage };
+export { default as LandingPage } from './LandingPage';
+export { default as BlocksPage } from './BlocksPage';
+export { default as AccountPage } from './AccountPage';
+export { default as TransactionPage } from './TransactionPage';

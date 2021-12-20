@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
 import LayoutWrapper from './layout';
-import { LandingPage, BlocksPage, AccountPage } from './screens';
+import { LandingPage, BlocksPage, AccountPage, TransactionPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
 
@@ -26,6 +25,9 @@ function App() {
                             </Route>
                             <Route path="/account">
                                 <AccountPage />
+                            </Route>
+                            <Route path="/txn/:txnHash">
+                                <TransactionPage />
                             </Route>
                             {/* <Route path="/block/:blockNumber">
                                 <BlockPage />
