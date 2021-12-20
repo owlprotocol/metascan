@@ -111,7 +111,7 @@ const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
 `;
 
-const BlocksPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
+const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
     const tableData = [
         {
             hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
@@ -168,7 +168,7 @@ const BlocksPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '
                         </Col>
                         <Col xs="12" md="6">
                             <CurrencyDetailsCard>
-                                <AddressBar address={address} />
+                                <AddressBar address={address} hasQR />
                                 <div>
                                     <svg
                                         width="20"
@@ -254,4 +254,4 @@ const BlocksPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '
     );
 };
 
-export default BlocksPage;
+export default AccountPage;
