@@ -10,7 +10,7 @@ function useApp() {
 
     useEffect(() => {
         // Note: replace with store current network ID.
-        const currentNetwork = NETWORKS[ChainId.LOCAL];
+        const currentNetwork = NETWORKS[ChainId.INFURA];
         const networkId = currentNetwork.ID as string;
         const networkRpc = currentNetwork.RPC as string;
         const web3 = new Web3(networkRpc);
