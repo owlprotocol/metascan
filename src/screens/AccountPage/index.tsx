@@ -1,8 +1,8 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, HashRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable } from '../../components';
-import { NAV_LINKS } from '../../constants';
+import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 
 const Wrapper = styled.div`
@@ -221,12 +221,15 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                 </Container>
             </HeroWrapper>
 
+            {/* <HashRouter> */}
             <Container>
                 <Navigation>
-                    {NAV_LINKS.map((link, key) => (
-                        <NavLink to={link.href} key={key}>
-                            {link.label}
-                        </NavLink>
+                    {ACCOUNT_DETAILS.map((link) => (
+                        <HashRouter hashType="noslash" key={link.label}>
+                            <NavLink to={link.href} key={link.label}>
+                                {link.label}
+                            </NavLink>
+                        </HashRouter>
                     ))}
                     <button>
                         <svg width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -250,6 +253,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                     <TransactionsTable data={tableData} />
                 </TableWrapper>
             </Container>
+            {/* </HashRouter> */}
         </Wrapper>
     );
 };
