@@ -1,4 +1,4 @@
-import { ComponentType, useEffect, createRef, useRef } from 'react';
+import { ComponentType, useEffect, useRef } from 'react';
 import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
@@ -269,7 +269,6 @@ const AccountPage = ({
                 <Navigation>
                     <NavLink
                         ref={defRef}
-                        className={ACCOUNT_DETAILS[0].label}
                         exact
                         to={'/account'}
                         // isActive={(match, location) => (match !== null ? true : false)}
@@ -283,7 +282,6 @@ const AccountPage = ({
                                     ref={(e: HTMLAnchorElement) =>
                                         refs.current.length < ACCOUNT_DETAILS.length - 1 && refs.current.push(e)
                                     }
-                                    className={link.label}
                                     exact
                                     to={link.href}
                                     // isActive={(match, location) => (match !== null ? true : false)}
@@ -307,12 +305,18 @@ const AccountPage = ({
                     </button>
                 </Navigation>
 
+                {console.log(location)}
                 <StatementText>
                     Latest 25 from a total of <span>3,688</span> transactions
                 </StatementText>
 
                 <TableWrapper>
-                    <TransactionsTable data={tableData} />
+                    {{
+                        '#internaltx': <TransactionsTable data={tableData} />,
+                        '#tokentxns': <div>ERC20 Txns</div>,
+                        '#tokentxnsErc721': <div>ERC721 Txns</div>,
+                        '#comments': <div>comments</div>,
+                    }[location.hash] || <TransactionsTable data={tableData} />}
                 </TableWrapper>
             </Container>
         </Wrapper>
