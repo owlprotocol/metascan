@@ -1,7 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { withThemeProvider } from '../../hoc';
 import AccountPage from '.';
-import { ACCOUNT_DETAILS } from '../../constants';
 
 const Wrapper = withThemeProvider((props: any) => {
     return <AccountPage {...props} />;
@@ -21,5 +20,4 @@ Main.args = {
     lastBalanceChange: '1 day',
     txs: '3,742',
     address: '0x63CD72389dc25DaF9A5c5016a4a6487d7471Ce73',
-    selected: ACCOUNT_DETAILS[0].href,
 };

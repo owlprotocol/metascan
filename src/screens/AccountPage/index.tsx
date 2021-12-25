@@ -1,5 +1,5 @@
 import { ComponentType, useEffect, useRef } from 'react';
-import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
+import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable } from '../../components';
@@ -92,14 +92,7 @@ const CurrencyDetailsCard = styled(MetascanCardWrapper)`
     }
 `;
 
-const Navigation = styled(NavigationWrapper)`
-    justify-content: space-between;
-    margin-bottom: 0;
-
-    .active {
-        background-color: #2090f960;
-    }
-`;
+const Navigation = styled(NavigationWrapper)``;
 
 const StatementText = styled.div`
     font-size: 16px;
@@ -126,7 +119,7 @@ const AccountPage = ({
     const tableData = [
         {
             hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            method: 'approve',
+            method: 'approveSomethingExtremelyLooooooooongoooooooooooooooooooooooooooooooooooooooooooooooooooooo',
             block: '1345711',
             age: '6 days 10 hrs ago	',
             from: '0x23908928b70d0b638d0f7544528538c78a6',
@@ -145,6 +138,25 @@ const AccountPage = ({
             'txn fee': '0.001913048528',
         },
     ];
+    const internalTableData = [
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            block: '1345711',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: 'ENS: ENS Token',
+            value: '1 Ether',
+        },
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            block: '1345711',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: 'ENS: ENS Token',
+            value: '1 Ether',
+        },
+    ];
+
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
@@ -154,20 +166,30 @@ const AccountPage = ({
         if (defRef.current === null) return;
         //on each route change, set all route options except first one to white
         for (let i = 0; i < refs.current.length; i++) {
-            refs.current[i].style.backgroundColor = 'white';
+            deselect(refs.current[i]);
         }
         //if current hash route is a valid href (excluding first one)
         //set that as selected
         for (let i = 1; i < ACCOUNT_DETAILS.length; i++) {
             if ('#' + ACCOUNT_DETAILS[i].href === location.hash) {
-                defRef.current.style.backgroundColor = 'white';
-                refs.current[i - 1].style.backgroundColor = '#2090f960';
+                deselect(defRef.current);
+                select(refs.current[i - 1]);
                 return;
             }
         }
         //otherwise, set the first route options as selected
-        defRef.current.style.backgroundColor = '#2090f960';
+        select(defRef.current);
     });
+
+    const select = (ref: HTMLAnchorElement) => {
+        ref.style.backgroundColor = '#2090f960';
+        ref.style.color = 'black';
+    };
+
+    const deselect = (ref: HTMLAnchorElement) => {
+        ref.style.backgroundColor = 'white';
+        ref.style.color = '#70797b';
+    };
 
     return (
         <Wrapper>
@@ -312,11 +334,11 @@ const AccountPage = ({
 
                 <TableWrapper>
                     {{
-                        '#internaltx': <TransactionsTable data={tableData} />,
+                        '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
                         '#tokentxns': <div>ERC20 Txns</div>,
                         '#tokentxnsErc721': <div>ERC721 Txns</div>,
                         '#comments': <div>comments</div>,
-                    }[location.hash] || <TransactionsTable data={tableData} />}
+                    }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
                 </TableWrapper>
             </Container>
         </Wrapper>
