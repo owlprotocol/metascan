@@ -2,7 +2,7 @@ import { ComponentType, useEffect, useRef } from 'react';
 import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
-import { SearchBar, AddressBar, TransactionsTable } from '../../components';
+import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable } from '../../components';
 import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 
@@ -156,7 +156,43 @@ const AccountPage = ({
             value: '1 Ether',
         },
     ];
+    const ERC20Data = [
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+            value: '1.78',
+            token: 'WETH',
+        },
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+            value: '1.78',
+            token: 'WETH',
+        },
+    ];
 
+    const ERC721Data = [
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+            'token ID': 7088,
+            token: 'BAYC',
+        },
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+            'token ID': 3408,
+            token: 'PUNK',
+        },
+    ];
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
@@ -327,7 +363,6 @@ const AccountPage = ({
                     </button>
                 </Navigation>
 
-                {console.log(location)}
                 <StatementText>
                     Latest 25 from a total of <span>3,688</span> transactions
                 </StatementText>
@@ -335,8 +370,8 @@ const AccountPage = ({
                 <TableWrapper>
                     {{
                         '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
-                        '#tokentxns': <div>ERC20 Txns</div>,
-                        '#tokentxnsErc721': <div>ERC721 Txns</div>,
+                        '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
+                        '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
                         '#comments': <div>comments</div>,
                     }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
                 </TableWrapper>
