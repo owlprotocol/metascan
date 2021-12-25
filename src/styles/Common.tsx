@@ -13,6 +13,7 @@ const NavigationWrapper = styled.div`
     align-items: center;
     justify-content: center;
     padding: 30px 0;
+    flex-wrap: wrap;
     margin-bottom: 30px;
 
     a {
@@ -22,7 +23,7 @@ const NavigationWrapper = styled.div`
         line-height: 28px;
         text-align: center;
         letter-spacing: 0.2px;
-        margin: 0 12px;
+        margin: 10px 12px;
         text-decoration: none;
         border-radius: 50px;
         padding: 6px 22px;
