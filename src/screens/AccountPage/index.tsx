@@ -1,4 +1,5 @@
-import { NavLink, HashRouter } from 'react-router-dom';
+import { ComponentType, useEffect, createRef, useRef } from 'react';
+import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable } from '../../components';
@@ -94,6 +95,10 @@ const CurrencyDetailsCard = styled(MetascanCardWrapper)`
 const Navigation = styled(NavigationWrapper)`
     justify-content: space-between;
     margin-bottom: 0;
+
+    .active {
+        background-color: #2090f960;
+    }
 `;
 
 const StatementText = styled.div`
@@ -111,7 +116,13 @@ const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
 `;
 
-const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
+const AccountPage = ({
+    firstBalanceChange = '1',
+    lastBalanceChange = '1',
+    txs = '1',
+    address = '1',
+    selected = ACCOUNT_DETAILS[0].label,
+}) => {
     const tableData = [
         {
             hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
@@ -123,7 +134,40 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
             value: '1 Ether',
             'txn fee': '0.001913048528',
         },
+        {
+            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+            method: 'approve',
+            block: '1345711',
+            age: '6 days 10 hrs ago	',
+            from: '0x23908928b70d0b638d0f7544528538c78a6',
+            to: 'ENS: ENS Token',
+            value: '1 Ether',
+            'txn fee': '0.001913048528',
+        },
     ];
+    const refs = useRef<HTMLAnchorElement[]>([]);
+    const defRef = useRef<HTMLAnchorElement>(null);
+    const location = useLocation();
+
+    //selection handling
+    useEffect(() => {
+        if (defRef.current === null) return;
+        //on each route change, set all route options except first one to white
+        for (let i = 0; i < refs.current.length; i++) {
+            refs.current[i].style.backgroundColor = 'white';
+        }
+        //if current hash route is a valid href (excluding first one)
+        //set that as selected
+        for (let i = 1; i < ACCOUNT_DETAILS.length; i++) {
+            if ('#' + ACCOUNT_DETAILS[i].href === location.hash) {
+                defRef.current.style.backgroundColor = 'white';
+                refs.current[i - 1].style.backgroundColor = '#2090f960';
+                return;
+            }
+        }
+        //otherwise, set the first route options as selected
+        defRef.current.style.backgroundColor = '#2090f960';
+    });
 
     return (
         <Wrapper>
@@ -221,16 +265,34 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                 </Container>
             </HeroWrapper>
 
-            {/* <HashRouter> */}
             <Container>
                 <Navigation>
-                    {ACCOUNT_DETAILS.map((link) => (
-                        <HashRouter hashType="noslash" key={link.label}>
-                            <NavLink to={link.href} key={link.label}>
-                                {link.label}
-                            </NavLink>
-                        </HashRouter>
-                    ))}
+                    <NavLink
+                        ref={defRef}
+                        className={ACCOUNT_DETAILS[0].label}
+                        exact
+                        to={'/account'}
+                        // isActive={(match, location) => (match !== null ? true : false)}
+                    >
+                        {ACCOUNT_DETAILS[0].label}
+                    </NavLink>
+                    {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link, i) => {
+                        return (
+                            <HashRouter hashType="noslash" key={link.label}>
+                                <NavLink
+                                    ref={(e: HTMLAnchorElement) =>
+                                        refs.current.length < ACCOUNT_DETAILS.length - 1 && refs.current.push(e)
+                                    }
+                                    className={link.label}
+                                    exact
+                                    to={link.href}
+                                    // isActive={(match, location) => (match !== null ? true : false)}
+                                >
+                                    {link.label}
+                                </NavLink>
+                            </HashRouter>
+                        );
+                    })}
                     <button>
                         <svg width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -253,9 +315,8 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                     <TransactionsTable data={tableData} />
                 </TableWrapper>
             </Container>
-            {/* </HashRouter> */}
         </Wrapper>
     );
 };
 
-export default AccountPage;
+export default withRouter(AccountPage as ComponentType<RouteComponentProps>);
