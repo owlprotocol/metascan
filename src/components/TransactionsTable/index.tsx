@@ -116,11 +116,11 @@ const TransactionsTable = ({ data, internal }: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item: BlockItem, key) => {
+                    {data?.map((item: BlockItem) => {
                         return (
-                            <tr key={key}>
-                                {(internal ? INTERNAL_HEADER_LABELS : HEADER_LABELS).map((label, key) => (
-                                    <th scope="row" key={key}>
+                            <tr key={item.hash}>
+                                {(internal ? INTERNAL_HEADER_LABELS : HEADER_LABELS).map((label) => (
+                                    <th scope="row" key={label}>
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (

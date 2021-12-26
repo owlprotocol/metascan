@@ -110,16 +110,17 @@ const TokenTxnsTable = ({ data, ERC721 }: Props) => {
                 <thead>
                     <tr>
                         {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label, idx) => (
-                            <th key={idx}>{label}</th>
+                            <th key={label}>{label}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item: BlockItem, key) => {
+                    {data?.map((item: BlockItem) => {
+                        console.log(item);
                         return (
-                            <tr key={key}>
-                                {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label, key) => (
-                                    <th scope="row" key={key}>
+                            <tr key={item.hash}>
+                                {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label) => (
+                                    <th scope="row" key={label}>
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (
