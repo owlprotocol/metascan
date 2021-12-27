@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
@@ -5,6 +6,11 @@ import { SearchBar, AddressBar, CopyToClipboard, TokenPriceCard } from '../../co
 import { NAV_LINKS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import { ReactComponent as QuestionMarkIcon } from '../../icons/questionMark.svg';
+import { useFetchTransactionData } from '../../hooks';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { Transaction } from '@leovigna/web3-redux';
+import { useNetworkCreate } from '../../hooks/index';
 
 const Wrapper = styled.div`
     padding-bottom: 10vw;
@@ -215,11 +221,22 @@ const TransactionPage = ({
     txValue = '3',
     txFee = '0.05',
 }: Props) => {
+    useNetworkCreate();
     const params = useParams();
+    const dispatch = useDispatch();
 
     // Deploy throws on: Property 'txnHash' does not exist on type '{}'.  TS2339
     // @ts-ignore
-    const { txnHash } = params;
+    const { txnHash } = params as string;
+    const transactionData = useFetchTransactionData(txnHash);
+    console.log(transactionData);
+
+    useEffect(() => {
+        dispatch(Transaction.fetch({ networkId: '1', hash: txnHash }));
+    }, [params, dispatch, txnHash]);
+
+    const txnData = useSelector((state) => Transaction.selectById(state, `1-${txnHash}`));
+    console.log({ txnData });
 
     return (
         <Wrapper>
