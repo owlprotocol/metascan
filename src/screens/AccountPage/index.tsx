@@ -7,11 +7,86 @@ import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account as Web3Account } from '@leovigna/web3-redux';
-import store from '../../store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { stat } from 'fs/promises';
-import { iteratorSymbol } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
+
+//hardcoded data
+const tableData = [
+    {
+        hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        method: 'approveSomethingExtremelyLooooooooongoooooooooooooooooooooooooooooooooooooooooooooooooooooo',
+        block: '1345711',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: 'ENS: ENS Token',
+        value: '1 Ether',
+        'txn fee': '0.001913048528',
+    },
+    {
+        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        method: 'approve',
+        block: '1345711',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: 'ENS: ENS Token',
+        value: '1 Ether',
+        'txn fee': '0.001913048528',
+    },
+];
+const internalTableData = [
+    {
+        hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        block: '1345711',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: 'ENS: ENS Token',
+        value: '1 Ether',
+    },
+    {
+        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        block: '1345711',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: 'ENS: ENS Token',
+        value: '1 Ether',
+    },
+];
+const ERC20Data = [
+    {
+        hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+        value: '1.78',
+        token: 'WETH',
+    },
+    {
+        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+        value: '1.78',
+        token: 'WETH',
+    },
+];
+const ERC721Data = [
+    {
+        hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+        'token ID': 7088,
+        token: 'BAYC',
+    },
+    {
+        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+        age: '6 days 10 hrs ago	',
+        from: '0x23908928b70d0b638d0f7544528538c78a6',
+        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+        'token ID': 3408,
+        token: 'PUNK',
+    },
+];
 
 const NETWORK_ID = '1';
 
@@ -130,92 +205,19 @@ const selectCurrAddr = (addr: string) =>
     );
 
 const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
-    const tableData = [
-        {
-            hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            method: 'approveSomethingExtremelyLooooooooongoooooooooooooooooooooooooooooooooooooooooooooooooooooo',
-            block: '1345711',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: 'ENS: ENS Token',
-            value: '1 Ether',
-            'txn fee': '0.001913048528',
-        },
-        {
-            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            method: 'approve',
-            block: '1345711',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: 'ENS: ENS Token',
-            value: '1 Ether',
-            'txn fee': '0.001913048528',
-        },
-    ];
-    const internalTableData = [
-        {
-            hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            block: '1345711',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: 'ENS: ENS Token',
-            value: '1 Ether',
-        },
-        {
-            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            block: '1345711',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: 'ENS: ENS Token',
-            value: '1 Ether',
-        },
-    ];
-    const ERC20Data = [
-        {
-            hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-            value: '1.78',
-            token: 'WETH',
-        },
-        {
-            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-            value: '1.78',
-            token: 'WETH',
-        },
-    ];
-
-    const ERC721Data = [
-        {
-            hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-            'token ID': 7088,
-            token: 'BAYC',
-        },
-        {
-            hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-            age: '6 days 10 hrs ago	',
-            from: '0x23908928b70d0b638d0f7544528538c78a6',
-            to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-            'token ID': 3408,
-            token: 'PUNK',
-        },
-    ];
+    //routing
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
+
+    //Web3 data fetching
+    const dispatch = useDispatch();
     const { accountAddr } = useParams<{ accountAddr: string }>();
     const [validAddr, _] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
-
     const accountObj: Web3Account.Interface = useSelector<Web3Account.Interface>(
         selectCurrAddr(accountAddr),
     ) as Web3Account.Interface;
+
     //selection handling
     useEffect(() => {
         if (defRef.current === null) return;
@@ -237,12 +239,13 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
         select(defRef.current);
     });
 
+    //dispatching
     useEffect(() => {
         (async () => {
             const item = { networkId: '1', address: accountAddr };
-            store.dispatch(Web3Account.create(item));
-            store.dispatch(Web3Account.fetchBalance(item));
-            store.dispatch(Web3Account.fetchNonce(item));
+            dispatch(Web3Account.create(item));
+            dispatch(Web3Account.fetchBalance(item));
+            dispatch(Web3Account.fetchNonce(item));
         })();
     }, [accountAddr]);
 
