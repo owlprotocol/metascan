@@ -7,8 +7,7 @@ import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account as Web3Account } from '@leovigna/web3-redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useApp, useAccount } from '../../hooks';
 
 //hardcoded data
 const tableData = [
@@ -193,30 +192,17 @@ const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
 `;
 
-const selectCurrAddr = (addr: string) =>
-    createSelector(
-        (state: any) => state.web3Redux.Account.itemsById,
-        (items: Web3Account.Interface[]) => {
-            if (!items) return {};
-            for (const item in items) {
-                if (item === `${NETWORK_ID}-${addr}`) return items[item];
-            }
-        },
-    );
-
-const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
+const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //routing
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
 
     //Web3 data fetching
-    const dispatch = useDispatch();
+    useApp();
     const { accountAddr } = useParams<{ accountAddr: string }>();
-    const [validAddr, _] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
-    const accountObj: Web3Account.Interface = useSelector<Web3Account.Interface>(
-        selectCurrAddr(accountAddr),
-    ) as Web3Account.Interface;
+    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
+    const accountObj: Web3Account.Interface = useAccount(NETWORK_ID, accountAddr);
 
     //selection handling
     useEffect(() => {
@@ -238,14 +224,6 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
         //defRef = default reference
         select(defRef.current);
     });
-
-    //dispatching
-    useEffect(() => {
-        const item = { networkId: '1', address: accountAddr };
-        dispatch(Web3Account.create(item));
-        dispatch(Web3Account.fetchBalance(item));
-        dispatch(Web3Account.fetchNonce(item));
-    }, [accountAddr]);
 
     return (
         <Wrapper>
@@ -286,7 +264,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                                     <div>Last balance change</div>
                                     <div>Sent {lastBalanceChange} ago</div>
                                     <div>Transaction count</div>
-                                    <div>{accountObj?.nonce ? accountObj.nonce : ''}</div>
+                                    <div>{accountObj?.nonce ? accountObj.nonce : '0'}</div>
                                 </AccountDetailsCard>
                             </Col>
                             <Col xs="12" md="6">
@@ -314,7 +292,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                                     <div className="flex">
                                         <span>Balance</span>
                                         <span>
-                                            {accountObj?.balance ? web3.utils.fromWei(accountObj.balance) : ''} ETH
+                                            {accountObj?.balance ? web3.utils.fromWei(accountObj.balance) : '0'} ETH
                                         </span>
                                     </div>
                                     <div className="flex">
@@ -351,7 +329,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                         >
                             {ACCOUNT_DETAILS[0].label}
                         </NavLink>
-                        {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link, i) => {
+                        {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link) => {
                             return (
                                 <HashRouter hashType="noslash" key={link.label}>
                                     <NavLink

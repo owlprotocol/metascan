@@ -28,7 +28,7 @@ module.exports = {
         'import/no-anonymous-default-export': 'off',
         'import/no-cycle': 'error',
         'import/no-self-import': 'error',
-        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
