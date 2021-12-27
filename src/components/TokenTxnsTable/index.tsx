@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Table as ReactstrapTable } from 'reactstrap';
 import { shortenHash, shortenHashLength } from '../../utils';
@@ -109,7 +108,7 @@ const TokenTxnsTable = ({ data, ERC721 }: Props) => {
             <ReactstrapTable responsive>
                 <thead>
                     <tr>
-                        {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label, idx) => (
+                        {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label) => (
                             <th key={label}>{label}</th>
                         ))}
                     </tr>
