@@ -2,7 +2,7 @@ import { ComponentType, useEffect, useRef, useState } from 'react';
 import { useParams, NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
-import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable } from '../../components';
+import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable, TokenDropDown } from '../../components';
 import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
@@ -196,7 +196,7 @@ const TableWrapper = styled.div`
 const selectCurrAddr = (addr: string) =>
     createSelector(
         (state: any) => state.web3Redux.Account.itemsById,
-        (items: any) => {
+        (items: Web3Account.Interface[]) => {
             if (!items) return {};
             for (const item in items) {
                 if (item === `${NETWORK_ID}-${addr}`) return items[item];
@@ -241,12 +241,10 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
 
     //dispatching
     useEffect(() => {
-        (async () => {
-            const item = { networkId: '1', address: accountAddr };
-            dispatch(Web3Account.create(item));
-            dispatch(Web3Account.fetchBalance(item));
-            dispatch(Web3Account.fetchNonce(item));
-        })();
+        const item = { networkId: '1', address: accountAddr };
+        dispatch(Web3Account.create(item));
+        dispatch(Web3Account.fetchBalance(item));
+        dispatch(Web3Account.fetchNonce(item));
     }, [accountAddr]);
 
     return (
@@ -323,16 +321,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = 
                                         <span>Ether Value</span>
                                         <span>43,590.06 (4,375.65/ETH) USD</span>
                                     </div>
-                                    <div className="flex">
-                                        <div>Tokens</div>
-                                        <div style={{ width: '72%' }}>
-                                            <select>
-                                                <option>239,765.46 USD</option>
-                                                <option>239,765.46 USD</option>
-                                                <option>239,765.46 USD</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <TokenDropDown accountAddr={accountAddr} networkId={NETWORK_ID} />
                                 </CurrencyDetailsCard>
                             </Col>
                             <Col xs="12" md="3">
