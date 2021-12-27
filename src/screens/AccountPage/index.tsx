@@ -1,10 +1,19 @@
-import { ComponentType, useEffect, useRef } from 'react';
-import { NavLink, HashRouter, withRouter, RouteComponentProps, useLocation, Link } from 'react-router-dom';
+import { ComponentType, useEffect, useRef, useState } from 'react';
+import { useParams, NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable } from '../../components';
 import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
+import web3 from 'web3';
+import { Account as Web3Account } from '@leovigna/web3-redux';
+import store from '../../store/store';
+import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import { stat } from 'fs/promises';
+import { iteratorSymbol } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
+
+const NETWORK_ID = '1';
 
 const Wrapper = styled.div`
     .container {
@@ -109,13 +118,18 @@ const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
 `;
 
-const AccountPage = ({
-    firstBalanceChange = '1',
-    lastBalanceChange = '1',
-    txs = '1',
-    address = '1',
-    selected = ACCOUNT_DETAILS[0].label,
-}) => {
+const selectCurrAddr = (addr: string) =>
+    createSelector(
+        (state: any) => state.web3Redux.Account.itemsById,
+        (items: any) => {
+            if (!items) return {};
+            for (const item in items) {
+                if (item === `${NETWORK_ID}-${addr}`) return items[item];
+            }
+        },
+    );
+
+const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1', txs = '1', address = '1' }) => {
     const tableData = [
         {
             hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
@@ -196,7 +210,12 @@ const AccountPage = ({
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
+    const { accountAddr } = useParams<{ accountAddr: string }>();
+    const [validAddr, _] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
 
+    const accountObj: Web3Account.Interface = useSelector<Web3Account.Interface>(
+        selectCurrAddr(accountAddr),
+    ) as Web3Account.Interface;
     //selection handling
     useEffect(() => {
         if (defRef.current === null) return;
@@ -214,18 +233,18 @@ const AccountPage = ({
             }
         }
         //otherwise, set the first route options as selected
+        //defRef = default reference
         select(defRef.current);
     });
 
-    const select = (ref: HTMLAnchorElement) => {
-        ref.style.backgroundColor = '#2090f960';
-        ref.style.color = 'black';
-    };
-
-    const deselect = (ref: HTMLAnchorElement) => {
-        ref.style.backgroundColor = 'white';
-        ref.style.color = '#70797b';
-    };
+    useEffect(() => {
+        (async () => {
+            const item = { networkId: '1', address: accountAddr };
+            store.dispatch(Web3Account.create(item));
+            store.dispatch(Web3Account.fetchBalance(item));
+            store.dispatch(Web3Account.fetchNonce(item));
+        })();
+    }, [accountAddr]);
 
     return (
         <Wrapper>
@@ -257,127 +276,151 @@ const AccountPage = ({
                         </Headline>
                     </Row>
 
-                    <Row>
-                        <Col xs="12" md="3">
-                            <AccountDetailsCard>
-                                <div>First balance change</div>
-                                <div>Received {firstBalanceChange} ago</div>
-                                <div>Last balance change</div>
-                                <div>Sent {lastBalanceChange} ago</div>
-                                <div>Transaction count</div>
-                                <div>{txs}</div>
-                            </AccountDetailsCard>
-                        </Col>
-                        <Col xs="12" md="6">
-                            <CurrencyDetailsCard>
-                                <AddressBar address={address} hasQR />
-                                <div>
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M10 19.375C15.1777 19.375 19.375 15.1777 19.375 10C19.375 4.82233 15.1777 0.625 10 0.625C4.82233 0.625 0.625 4.82233 0.625 10C0.625 15.1777 4.82233 19.375 10 19.375Z"
-                                            fill="#5092C5"
-                                        />
-                                        <path
-                                            d="M12.8125 4.6875L10 7.5L7.1875 4.6875H5.3125V15.3125H7.1875V7.5L10 10.3125L12.8125 7.5V15.3125H14.6875V4.6875H12.8125Z"
-                                            fill="white"
-                                        />
-                                    </svg>
-                                    <a href="/">View address on other chains</a>
-                                </div>
-                                <div className="flex">
-                                    <span>Balance</span>
-                                    <span>9.6196293683046072 ETH | 43,372.99 USD</span>
-                                </div>
-                                <div className="flex">
-                                    <span>Ether Value</span>
-                                    <span>43,590.06 (4,375.65/ETH) USD</span>
-                                </div>
-                                <div className="flex">
-                                    <div>Tokens</div>
-                                    <div style={{ width: '72%' }}>
-                                        <select>
-                                            <option>239,765.46 USD</option>
-                                            <option>239,765.46 USD</option>
-                                            <option>239,765.46 USD</option>
-                                        </select>
+                    {validAddr ? (
+                        <Row>
+                            <Col xs="12" md="3">
+                                <AccountDetailsCard>
+                                    <div>First balance change</div>
+                                    <div>Received {firstBalanceChange} ago</div>
+                                    <div>Last balance change</div>
+                                    <div>Sent {lastBalanceChange} ago</div>
+                                    <div>Transaction count</div>
+                                    <div>{accountObj?.nonce ? accountObj.nonce : ''}</div>
+                                </AccountDetailsCard>
+                            </Col>
+                            <Col xs="12" md="6">
+                                <CurrencyDetailsCard>
+                                    <AddressBar address={accountAddr} hasQR />
+                                    <div>
+                                        <svg
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 20 20"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M10 19.375C15.1777 19.375 19.375 15.1777 19.375 10C19.375 4.82233 15.1777 0.625 10 0.625C4.82233 0.625 0.625 4.82233 0.625 10C0.625 15.1777 4.82233 19.375 10 19.375Z"
+                                                fill="#5092C5"
+                                            />
+                                            <path
+                                                d="M12.8125 4.6875L10 7.5L7.1875 4.6875H5.3125V15.3125H7.1875V7.5L10 10.3125L12.8125 7.5V15.3125H14.6875V4.6875H12.8125Z"
+                                                fill="white"
+                                            />
+                                        </svg>
+                                        <a href="/">View address on other chains</a>
                                     </div>
-                                </div>
-                            </CurrencyDetailsCard>
-                        </Col>
-                        <Col xs="12" md="3">
-                            <AccountDetailsCard>
-                                <div>More Info</div>
-                                <div>
-                                    My name tag
-                                    <a href="/login">Login</a>
-                                </div>
-                            </AccountDetailsCard>
-                        </Col>
-                    </Row>
+                                    <div className="flex">
+                                        <span>Balance</span>
+                                        <span>
+                                            {accountObj?.balance ? web3.utils.fromWei(accountObj.balance) : ''} ETH
+                                        </span>
+                                    </div>
+                                    <div className="flex">
+                                        <span>Ether Value</span>
+                                        <span>43,590.06 (4,375.65/ETH) USD</span>
+                                    </div>
+                                    <div className="flex">
+                                        <div>Tokens</div>
+                                        <div style={{ width: '72%' }}>
+                                            <select>
+                                                <option>239,765.46 USD</option>
+                                                <option>239,765.46 USD</option>
+                                                <option>239,765.46 USD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </CurrencyDetailsCard>
+                            </Col>
+                            <Col xs="12" md="3">
+                                <AccountDetailsCard>
+                                    <div>More Info</div>
+                                    <div>
+                                        My name tag
+                                        <a href="/login">Login</a>
+                                    </div>
+                                </AccountDetailsCard>
+                            </Col>
+                        </Row>
+                    ) : (
+                        <div>Invalid Ethereum Address</div>
+                    )}
                 </Container>
             </HeroWrapper>
 
-            <Container>
-                <Navigation>
-                    <NavLink
-                        ref={defRef}
-                        exact
-                        to={'/account'}
-                        // isActive={(match, location) => (match !== null ? true : false)}
-                    >
-                        {ACCOUNT_DETAILS[0].label}
-                    </NavLink>
-                    {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link, i) => {
-                        return (
-                            <HashRouter hashType="noslash" key={link.label}>
-                                <NavLink
-                                    ref={(e: HTMLAnchorElement) =>
-                                        refs.current.length < ACCOUNT_DETAILS.length - 1 && refs.current.push(e)
-                                    }
-                                    exact
-                                    to={link.href}
-                                    // isActive={(match, location) => (match !== null ? true : false)}
-                                >
-                                    {link.label}
-                                </NavLink>
-                            </HashRouter>
-                        );
-                    })}
-                    <button>
-                        <svg width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M0 10.5C0 4.97715 4.47715 0.5 10 0.5H24.125C29.6478 0.5 34.125 4.97715 34.125 10.5V25.5C34.125 31.0228 29.6478 35.5 24.125 35.5H10C4.47715 35.5 0 31.0228 0 25.5V10.5Z"
-                                fill="#D9E2FF"
-                            />
-                            <path
-                                d="M19.25 24.7308C19.25 25.2663 19.0195 25.7799 18.6093 26.1586C18.1991 26.5373 17.6427 26.75 17.0625 26.75C16.4823 26.75 15.9259 26.5373 15.5157 26.1586C15.1055 25.7799 14.875 25.2663 14.875 24.7308C14.875 24.1952 15.1055 23.6816 15.5157 23.303C15.9259 22.9243 16.4823 22.7115 17.0625 22.7115C17.6427 22.7115 18.1991 22.9243 18.6093 23.303C19.0195 23.6816 19.25 24.1952 19.25 24.7308ZM19.25 18C19.25 18.5355 19.0195 19.0491 18.6093 19.4278C18.1991 19.8065 17.6427 20.0192 17.0625 20.0192C16.4823 20.0192 15.9259 19.8065 15.5157 19.4278C15.1055 19.0491 14.875 18.5355 14.875 18C14.875 17.4645 15.1055 16.9509 15.5157 16.5722C15.9259 16.1935 16.4823 15.9808 17.0625 15.9808C17.6427 15.9808 18.1991 16.1935 18.6093 16.5722C19.0195 16.9509 19.25 17.4645 19.25 18ZM19.25 11.2692C19.25 11.8048 19.0195 12.3184 18.6093 12.697C18.1991 13.0757 17.6427 13.2885 17.0625 13.2885C16.4823 13.2885 15.9259 13.0757 15.5157 12.697C15.1055 12.3184 14.875 11.8048 14.875 11.2692C14.875 10.7337 15.1055 10.2201 15.5157 9.84142C15.9259 9.46274 16.4823 9.25 17.0625 9.25C17.6427 9.25 18.1991 9.46274 18.6093 9.84142C19.0195 10.2201 19.25 10.7337 19.25 11.2692Z"
-                                fill="#545454"
-                            />
-                        </svg>
-                    </button>
-                </Navigation>
+            {validAddr && (
+                <Container>
+                    <Navigation>
+                        <NavLink
+                            ref={defRef}
+                            exact
+                            to={location.pathname}
+                            // isActive={(match, location) => (match !== null ? true : false)}
+                        >
+                            {ACCOUNT_DETAILS[0].label}
+                        </NavLink>
+                        {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link, i) => {
+                            return (
+                                <HashRouter hashType="noslash" key={link.label}>
+                                    <NavLink
+                                        ref={(e: HTMLAnchorElement) =>
+                                            refs.current.length < ACCOUNT_DETAILS.length - 1 && refs.current.push(e)
+                                        }
+                                        exact
+                                        to={link.href}
+                                        // isActive={(match, location) => (match !== null ? true : false)}
+                                    >
+                                        {link.label}
+                                    </NavLink>
+                                </HashRouter>
+                            );
+                        })}
+                        <button>
+                            <svg
+                                width="35"
+                                height="36"
+                                viewBox="0 0 35 36"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M0 10.5C0 4.97715 4.47715 0.5 10 0.5H24.125C29.6478 0.5 34.125 4.97715 34.125 10.5V25.5C34.125 31.0228 29.6478 35.5 24.125 35.5H10C4.47715 35.5 0 31.0228 0 25.5V10.5Z"
+                                    fill="#D9E2FF"
+                                />
+                                <path
+                                    d="M19.25 24.7308C19.25 25.2663 19.0195 25.7799 18.6093 26.1586C18.1991 26.5373 17.6427 26.75 17.0625 26.75C16.4823 26.75 15.9259 26.5373 15.5157 26.1586C15.1055 25.7799 14.875 25.2663 14.875 24.7308C14.875 24.1952 15.1055 23.6816 15.5157 23.303C15.9259 22.9243 16.4823 22.7115 17.0625 22.7115C17.6427 22.7115 18.1991 22.9243 18.6093 23.303C19.0195 23.6816 19.25 24.1952 19.25 24.7308ZM19.25 18C19.25 18.5355 19.0195 19.0491 18.6093 19.4278C18.1991 19.8065 17.6427 20.0192 17.0625 20.0192C16.4823 20.0192 15.9259 19.8065 15.5157 19.4278C15.1055 19.0491 14.875 18.5355 14.875 18C14.875 17.4645 15.1055 16.9509 15.5157 16.5722C15.9259 16.1935 16.4823 15.9808 17.0625 15.9808C17.6427 15.9808 18.1991 16.1935 18.6093 16.5722C19.0195 16.9509 19.25 17.4645 19.25 18ZM19.25 11.2692C19.25 11.8048 19.0195 12.3184 18.6093 12.697C18.1991 13.0757 17.6427 13.2885 17.0625 13.2885C16.4823 13.2885 15.9259 13.0757 15.5157 12.697C15.1055 12.3184 14.875 11.8048 14.875 11.2692C14.875 10.7337 15.1055 10.2201 15.5157 9.84142C15.9259 9.46274 16.4823 9.25 17.0625 9.25C17.6427 9.25 18.1991 9.46274 18.6093 9.84142C19.0195 10.2201 19.25 10.7337 19.25 11.2692Z"
+                                    fill="#545454"
+                                />
+                            </svg>
+                        </button>
+                    </Navigation>
 
-                <StatementText>
-                    Latest 25 from a total of <span>3,688</span> transactions
-                </StatementText>
+                    <StatementText>
+                        Latest 25 from a total of <span>3,688</span> transactions
+                    </StatementText>
 
-                <TableWrapper>
-                    {{
-                        '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
-                        '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
-                        '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
-                        '#comments': <div>comments</div>,
-                    }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
-                </TableWrapper>
-            </Container>
+                    <TableWrapper>
+                        {{
+                            '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
+                            '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
+                            '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
+                            '#comments': <div>comments</div>,
+                        }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
+                    </TableWrapper>
+                </Container>
+            )}
         </Wrapper>
     );
 };
 
 export default withRouter(AccountPage as ComponentType<RouteComponentProps>);
+
+const select = (ref: HTMLAnchorElement) => {
+    ref.style.backgroundColor = '#2090f960';
+    ref.style.color = 'black';
+};
+
+const deselect = (ref: HTMLAnchorElement) => {
+    ref.style.backgroundColor = 'white';
+    ref.style.color = '#70797b';
+};
