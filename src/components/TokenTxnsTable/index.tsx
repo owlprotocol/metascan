@@ -116,7 +116,6 @@ const TokenTxnsTable = ({ data, ERC721 }: Props) => {
                 </thead>
                 <tbody>
                     {data?.map((item: BlockItem) => {
-                        console.log(item);
                         return (
                             <tr key={item.hash}>
                                 {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label) => (
