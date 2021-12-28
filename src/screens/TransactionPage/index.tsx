@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
@@ -6,11 +5,8 @@ import { SearchBar, AddressBar, CopyToClipboard, TokenPriceCard } from '../../co
 import { NAV_LINKS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import { ReactComponent as QuestionMarkIcon } from '../../icons/questionMark.svg';
-import { useFetchTransactionData } from '../../hooks';
-
-import { useSelector, useDispatch } from 'react-redux';
-import { Transaction } from '@leovigna/web3-redux';
-import { useNetworkCreate } from '../../hooks/index';
+import { useNetworkCreate, useFetchTransactionData } from '../../hooks';
+import composeHooks from 'react-hooks-compose';
 
 const Wrapper = styled.div`
     padding-bottom: 10vw;
@@ -198,46 +194,43 @@ const TxnStatusWrapper = styled.div`
     }
 `;
 
-interface Props {
-    txnAmount?: string;
-    txnFee?: string;
-    confirmations?: string;
-    recipient?: string;
-    blockNumber?: string;
-    fromAddress?: string;
-    toAddress?: string;
-    txValue?: string;
-    txFee?: string;
-}
-
-const TransactionPage = ({
-    txnAmount = '1',
-    txnFee = '1',
-    confirmations = '12',
-    recipient = '1',
-    blockNumber = '123123123',
-    fromAddress = '0x63cd72389dc25daf9a5c5016a4a6487d7471ce73',
-    toAddress = '0x63cd72389dc25daf9a5c5016a4a6487d7471ce73',
-    txValue = '3',
-    txFee = '0.05',
-}: Props) => {
+const useTransactionPageHook = () => {
     useNetworkCreate();
     const params = useParams();
-    const dispatch = useDispatch();
 
     // Deploy throws on: Property 'txnHash' does not exist on type '{}'.  TS2339
     // @ts-ignore
     const { txnHash } = params as string;
-    const transactionData = useFetchTransactionData(txnHash);
-    console.log(transactionData);
+    const transactionData = useFetchTransactionData(txnHash) as PresenterProps;
+    if (!transactionData) return;
+    return transactionData;
+};
 
-    useEffect(() => {
-        dispatch(Transaction.fetch({ networkId: '1', hash: txnHash }));
-    }, [params, dispatch, txnHash]);
+interface PresenterProps {
+    hash?: string;
+    txnFee?: string;
+    gasPrice?: string;
+    confirmations?: string;
+    recipient?: string;
+    blockNumber?: string;
+    from?: string;
+    to?: string;
+    value?: string;
+    txFee?: string;
+}
 
-    const txnData = useSelector((state) => Transaction.selectById(state, `1-${txnHash}`));
-    console.log({ txnData });
-
+const TransactionPagePresenter = ({
+    hash = '',
+    txnFee = '',
+    gasPrice = '',
+    confirmations = '',
+    recipient = '',
+    blockNumber = '',
+    from = '',
+    to = '',
+    value = '',
+    txFee = '',
+}: PresenterProps) => {
     return (
         <Wrapper>
             <HeroWrapper>
@@ -271,9 +264,9 @@ const TransactionPage = ({
                     <Row>
                         <Col xs="12" md="3">
                             <AccountDetailsCard>
-                                <AddressBar address={txnHash} title="Transaction Hash" />
+                                <AddressBar address={hash} title="Transaction Hash" />
                                 <DetailsTitle>Amount Transacted</DetailsTitle>
-                                <div>{txnAmount}</div>
+                                <div>{value}</div>
                                 <DetailsTitle>Transaction Fee</DetailsTitle>
                                 <div>{txnFee}</div>
                             </AccountDetailsCard>
@@ -413,9 +406,7 @@ const TransactionPage = ({
                                 <QuestionMarkIcon />
                                 Gas price
                             </span>
-                            <span>
-                                <NavLink to={`/block/${blockNumber}`}>{blockNumber}</NavLink>
-                            </span>
+                            <span>{gasPrice}</span>
                         </div>
                         <div>
                             <span className="title">
@@ -435,19 +426,20 @@ const TransactionPage = ({
                                 From
                             </span>
                             <span>
-                                <NavLink to={`/address/${fromAddress}`}>{fromAddress}</NavLink>
-                                <CopyToClipboard text={fromAddress} />
+                                <NavLink to={`/address/${from}`}>{from}</NavLink>
+                                <CopyToClipboard text={from} />
                             </span>
                         </div>
                         <div>
                             <span className="title">
                                 <QuestionMarkIcon />
-                                Interacted with
+                                To
+                                {/* Interacted with */}
                             </span>
                             <span>
-                                Contract &nbsp;
-                                <NavLink to={`/address/${toAddress}`}>{toAddress}</NavLink>
-                                <CopyToClipboard text={toAddress} />
+                                {/* Contract &nbsp; */}
+                                <NavLink to={`/address/${to}`}>{to}</NavLink>
+                                <CopyToClipboard text={to} />
                             </span>
                         </div>
                     </div>
@@ -457,7 +449,7 @@ const TransactionPage = ({
                                 <QuestionMarkIcon />
                                 Value
                             </span>
-                            <span>{txValue} ETH (0.0) $</span>
+                            <span>{value} ETH (0.0) $</span>
                         </div>
                         <div>
                             <span className="title">
@@ -514,4 +506,8 @@ const TransactionPage = ({
     );
 };
 
-export default TransactionPage;
+const TransactionPageContainer = composeHooks(() => ({
+    useTransactionPage: () => useTransactionPageHook(),
+}))(TransactionPagePresenter) as (props: any) => JSX.Element;
+
+export default TransactionPageContainer;
