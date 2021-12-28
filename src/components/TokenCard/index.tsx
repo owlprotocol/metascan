@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as BTCIcon } from '../../icons/btc.svg';
+import TokenIcon from '../../components/TokenIcon';
 
 const Wrapper = styled.div`
     background: #eaf4f4;
@@ -41,6 +41,7 @@ const TokenDetails = styled.div`
         font-weight: bold;
         font-size: 20px;
         color: #000;
+        text-transform: uppercase;
     }
 
     > div:last-of-type {
@@ -48,7 +49,6 @@ const TokenDetails = styled.div`
         font-size: 20px;
         letter-spacing: 0.2px;
         color: #655e5e;
-        /* margin: 6px 0; */
     }
 `;
 
@@ -65,12 +65,20 @@ const IconWrapper = styled.div`
     margin-right: 18px;
 `;
 
-const TokenCard = ({ token, price, change, blocks, txs }: any) => {
+export interface Props {
+    token: string;
+    price?: string;
+    change?: string;
+    blocks?: string;
+    txs?: string;
+}
+
+const TokenCard = ({ token, price, change, blocks, txs }: Props) => {
     return (
         <Wrapper>
             <Header>
                 <IconWrapper>
-                    <BTCIcon />
+                    <TokenIcon tokenName={token} size={54} />
                 </IconWrapper>
 
                 {(token || price || change) && (
