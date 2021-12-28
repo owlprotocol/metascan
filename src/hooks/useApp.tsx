@@ -7,7 +7,6 @@ import { NETWORKS, ChainId } from '../constants/network';
 // Hook for creating web3 network connection
 export function useApp() {
     const dispatch = useDispatch();
-
     useEffect(() => {
         // Note: replace with store current network ID.
         const currentNetwork = NETWORKS[ChainId.INFURA];

@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import web3 from 'web3';
 
 const GradBorderWrapper = styled.div`
     background: linear-gradient(269.68deg, #00f3b9 8.63%, #2091f9 50.28%);
@@ -8,7 +11,7 @@ const GradBorderWrapper = styled.div`
     padding: 2px;
 `;
 
-const Wrapper = styled.div`
+const FormWrapper = styled.form`
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -55,13 +58,22 @@ const Wrapper = styled.div`
 const PLACEHOLDER_TEXT = 'Search for transactions, addresses, blocks, embedded text data....';
 
 const SearchBar = () => {
+    const [searchInput, setSearchInput] = useState<string>('');
+    const history = useHistory();
+
     const handleChange = ({ target }: any) => {
-        console.log(target.value);
+        setSearchInput(target.value);
+    };
+
+    const handleSubmit = (/*e: any*/) => {
+        // e.preventDefault();
+        if (web3.utils.isAddress(searchInput)) history.push(`/account/${searchInput}`);
+        setSearchInput('');
     };
 
     return (
         <GradBorderWrapper>
-            <Wrapper>
+            <FormWrapper onSubmit={handleSubmit}>
                 <button className="btn-menu">
                     <svg width="30" height="19" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -72,7 +84,7 @@ const SearchBar = () => {
                     </svg>
                 </button>
 
-                <input placeholder={PLACEHOLDER_TEXT} onChange={handleChange} />
+                <input placeholder={PLACEHOLDER_TEXT} value={searchInput} onChange={handleChange} />
 
                 <div>
                     <button className="btn-camera">
@@ -93,7 +105,7 @@ const SearchBar = () => {
                         </svg>
                     </button>
                 </div>
-            </Wrapper>
+            </FormWrapper>
         </GradBorderWrapper>
     );
 };
