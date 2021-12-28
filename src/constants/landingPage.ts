@@ -27,42 +27,42 @@ const NAV_LINKS = [
 
 const STUB_TOKEN_LIST = [
     {
-        token: 'Bitcoin',
+        token: 'btc',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',
         txs: '900,111,000',
     },
     {
-        token: 'Bitcoin',
+        token: 'usdt',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',
         txs: '900,111,000',
     },
     {
-        token: 'Bitcoin',
+        token: 'eth',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',
         txs: '900,111,000',
     },
     {
-        token: 'Bitcoin',
+        token: 'luna',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',
         txs: '900,111,000',
     },
     {
-        token: 'Bitcoin',
+        token: 'avax',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',
         txs: '900,111,000',
     },
     {
-        token: 'Bitcoin',
+        token: 'mana',
         price: '$57,980',
         change: '+2%',
         blocks: '807,900',

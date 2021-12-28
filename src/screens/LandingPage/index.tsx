@@ -67,8 +67,9 @@ const SectionHeader = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 850px;
+    max-width: 1100px;
     margin: 40px auto;
+    padding: 0 26px;
 
     span {
         font-size: 36px;
@@ -86,9 +87,6 @@ const SectionHeader = styled.div`
 
 const TokenListWrapper = styled.div`
     display: grid;
-    /*  Note: FOR MOBILE USE
-        grid-template-columns: repeat(1, 1fr);
-    */
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 0px;
@@ -99,6 +97,11 @@ const TokenListWrapper = styled.div`
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
+
+    /* Mobile md */
+    /* grid-template-columns: repeat(2, 1fr); */
+    /* Mobile sm */
+    /* grid-template-columns: repeat(1, 1fr); */
 `;
 
 const Navigation = styled(NavigationWrapper)``;
@@ -162,9 +165,9 @@ const LandingPage = () => {
                     </SectionHeader>
 
                     <TokenListWrapper>
-                        <TokenCard token="Ethereum" />
-                        <TokenCard token="USDC" />
-                        <TokenCard token="Solana" />
+                        <TokenCard token="eth" />
+                        <TokenCard token="usdc" />
+                        <TokenCard token="sol" />
                     </TokenListWrapper>
                 </SectionWrapper>
             </Container>
