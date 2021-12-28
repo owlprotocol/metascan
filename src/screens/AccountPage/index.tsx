@@ -8,6 +8,9 @@ import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account as Web3Account } from '@leovigna/web3-redux';
 import { useApp, useAccount } from '../../hooks';
+import { useEthPrice } from '../../hooks/useEthPrice';
+const { utils } = web3;
+const NETWORK_ID = '1';
 
 //hardcoded data
 const tableData = [
@@ -86,8 +89,6 @@ const ERC721Data = [
         token: 'PUNK',
     },
 ];
-
-const NETWORK_ID = '1';
 
 const Wrapper = styled.div`
     .container {
@@ -201,8 +202,13 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //Web3 data fetching
     useApp();
     const { accountAddr } = useParams<{ accountAddr: string }>();
-    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
-    const accountObj: Web3Account.Interface = useAccount(NETWORK_ID, accountAddr);
+    const [validAddr] = useState<boolean>(() => utils.isAddress(accountAddr));
+    const accountObj: { account: Web3Account.Interface; isContract: boolean | undefined } = useAccount(
+        NETWORK_ID,
+        accountAddr,
+    );
+    //Coinbase Api
+    const ethPrice: number = parseFloat(useEthPrice());
 
     //selection handling
     useEffect(() => {
@@ -264,12 +270,16 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                     <div>Last balance change</div>
                                     <div>Sent {lastBalanceChange} ago</div>
                                     <div>Transaction count</div>
-                                    <div>{accountObj?.nonce ? accountObj.nonce : '0'}</div>
+                                    <div>{accountObj?.account?.nonce ? accountObj.account.nonce : '0'}</div>
                                 </AccountDetailsCard>
                             </Col>
                             <Col xs="12" md="6">
                                 <CurrencyDetailsCard>
-                                    <AddressBar address={accountAddr} hasQR />
+                                    <AddressBar
+                                        address={accountAddr}
+                                        title={accountObj?.isContract === true ? 'Contract' : 'Address'}
+                                        hasQR
+                                    />
                                     <div>
                                         <svg
                                             width="20"
@@ -292,12 +302,24 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                     <div className="flex">
                                         <span>Balance</span>
                                         <span>
-                                            {accountObj?.balance ? web3.utils.fromWei(accountObj.balance) : '0'} ETH
+                                            {accountObj?.account?.balance
+                                                ? web3.utils.fromWei(accountObj.account.balance)
+                                                : '0'}{' '}
+                                            ETH
                                         </span>
                                     </div>
                                     <div className="flex">
                                         <span>Ether Value</span>
-                                        <span>43,590.06 (4,375.65/ETH) USD</span>
+                                        <span>
+                                            {accountObj?.account?.balance
+                                                ? Math.round(
+                                                      parseFloat(web3.utils.fromWei(accountObj.account.balance)) *
+                                                          ethPrice *
+                                                          100,
+                                                  ) / 100
+                                                : '0'}{' '}
+                                            USD {`(${ethPrice}/ETH)`}
+                                        </span>
                                     </div>
                                     <TokenDropDown accountAddr={accountAddr} networkId={NETWORK_ID} />
                                 </CurrencyDetailsCard>

@@ -35,7 +35,7 @@ interface Props {
     hasQR?: boolean;
 }
 
-const AddressBar = ({ address, title = 'Address', hasQR = false }: Props) => {
+const AddressBar = ({ address, title = 'address', hasQR = false }: Props) => {
     const handleClickToCopy = () => {
         copy(String(address));
     };
