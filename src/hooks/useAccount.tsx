@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Account } from '@leovigna/web3-redux';
+import { EOA_DETAILS, CONTRACT_DETAILS } from '../constants';
 import { NETWORKS, ChainId } from '../constants/network';
 import Web3 from 'web3';
 
@@ -19,10 +20,9 @@ const selectCurrAddr = (networkId: string, addr: string) =>
 function useAccount(networkId: string, accountAddr: string) {
     const dispatch = useDispatch();
 
-    /* eslint-disable */ //@ts-ignore
     const web3Instance = new Web3(NETWORKS[ChainId.INFURA].WSS);
-    /* eslint-disable */ //@ts-ignore
     const [isContract, setIsContract] = useState<boolean>();
+    const [optionTabs, setOptionTabs] = useState<{ href: string; label: string }[]>(EOA_DETAILS);
     const account: Account.Interface = useSelector<Account.Interface>(
         selectCurrAddr(networkId, accountAddr),
     ) as Account.Interface;
@@ -31,14 +31,19 @@ function useAccount(networkId: string, accountAddr: string) {
     useEffect(() => {
         (async () => {
             const code = await web3Instance?.eth.getCode(accountAddr);
-            if (code !== '0x') setIsContract(true);
-            else setIsContract(false);
+            if (code !== '0x') {
+                setIsContract(true);
+                setOptionTabs(CONTRACT_DETAILS);
+            } else {
+                setOptionTabs(EOA_DETAILS);
+                setIsContract(false);
+            }
         })();
         dispatch(Account.create(item));
         dispatch(Account.fetchBalance(item));
         dispatch(Account.fetchNonce(item));
     }, [accountAddr]);
-    return { account, isContract };
+    return { account, isContract, optionTabs };
 }
 
 export default useAccount;
