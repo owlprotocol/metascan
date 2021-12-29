@@ -5,10 +5,8 @@ import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable, TokenDropDown } from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
-import { Account as Web3Account } from '@leovigna/web3-redux';
-import { useApp, useAccount } from '../../hooks';
-import { useEthPrice } from '../../hooks/useEthPrice';
-const { utils } = web3;
+import { Account } from '@leovigna/web3-redux';
+import { useApp, useAccount, useEthPrice } from '../../hooks';
 const NETWORK_ID = '1';
 
 //hardcoded data
@@ -196,6 +194,13 @@ interface optionTab {
     label: string;
 }
 
+interface IAccount {
+    account: Account.Interface;
+    isContract?: boolean;
+    isERC721?: boolean;
+    optionTabs: optionTab[];
+}
+
 const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //routing
     const refs = useRef<HTMLAnchorElement[]>([]);
@@ -205,11 +210,8 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //Web3 data fetching
     useApp();
     const { accountAddr } = useParams<{ accountAddr: string }>();
-    const [validAddr] = useState<boolean>(() => utils.isAddress(accountAddr));
-    const accountObj: { account: Web3Account.Interface; isContract?: boolean; optionTabs: optionTab[] } = useAccount(
-        NETWORK_ID,
-        accountAddr,
-    );
+    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
+    const accountObj: IAccount = useAccount(NETWORK_ID, accountAddr);
     const { optionTabs } = accountObj;
     //Coinbase Api
     const ethPrice: number = useEthPrice();
@@ -347,20 +349,13 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
             {validAddr && (
                 <Container>
                     <Navigation>
-                        <NavLink
-                            ref={defRef}
-                            exact
-                            to={location.pathname}
-                            // isActive={(match, location) => (match !== null ? true : false)}
-                        >
+                        <NavLink ref={defRef} exact to={location.pathname}>
                             {optionTabs[0].label}
                         </NavLink>
-                        {console.log(refs.current)}
                         {optionTabs.slice(1, optionTabs.length).map((link, i) => {
                             return (
                                 <HashRouter hashType="noslash" key={link.label}>
                                     <NavLink
-                                        key={link.label}
                                         ref={(e: HTMLAnchorElement) => {
                                             if (refs.current.length < optionTabs.length - 1) {
                                                 refs.current[i] ? (refs.current[i] = e) : refs.current.push(e);
@@ -368,7 +363,6 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                         }}
                                         exact
                                         to={link.href}
-                                        // isActive={(match, location) => (match !== null ? true : false)}
                                     >
                                         {link.label}
                                     </NavLink>
