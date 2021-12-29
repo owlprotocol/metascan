@@ -5,7 +5,7 @@ import { Network } from '@leovigna/web3-redux';
 import { NETWORKS, ChainId } from '../constants/network';
 
 // Hook for creating web3 network connection
-export function useApp() {
+function useApp() {
     const dispatch = useDispatch();
     useEffect(() => {
         // Note: replace with store current network ID.
@@ -18,3 +18,5 @@ export function useApp() {
         dispatch(Network.create({ networkId, web3 }));
     }, [dispatch]);
 }
+
+export default useApp;

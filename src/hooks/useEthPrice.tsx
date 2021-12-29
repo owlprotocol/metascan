@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export function useEthPrice() {
+function useEthPrice() {
     const [price, setPrice] = useState<string>('0');
 
     useEffect(() => {
@@ -12,3 +12,5 @@ export function useEthPrice() {
     });
     return parseFloat(price);
 }
+
+export default useEthPrice;

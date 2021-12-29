@@ -183,7 +183,7 @@ const WETH_CONTR: TokenContract = { symbol: 'WETH', address: WETH_CONTR_ADDR, ab
 const USDC_CONTR: TokenContract = { symbol: 'USDC', address: USDC_CONTR_ADDR, abi: USDC_CONTR_ABI };
 let TokenList: TokenContract[] = [WETH_CONTR, USDC_CONTR];
 
-export function useFetchAccountTokens(networkId: string, accountAddr: string) {
+function useFetchAccountTokens(networkId: string, accountAddr: string) {
     const dispatch = useDispatch();
     TokenList = TokenList.map((contr) => {
         return {
@@ -205,3 +205,5 @@ export function useFetchAccountTokens(networkId: string, accountAddr: string) {
     }, []);
     return TokenList;
 }
+
+export default useFetchAccountTokens;
