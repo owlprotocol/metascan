@@ -3,7 +3,6 @@ import { useParams, NavLink, HashRouter, withRouter, RouteComponentProps, useLoc
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable, TokenDropDown } from '../../components';
-import { ACCOUNT_DETAILS } from '../../constants';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account as Web3Account } from '@leovigna/web3-redux';
@@ -192,6 +191,10 @@ const StatementText = styled.div`
 const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
 `;
+interface optionTab {
+    href: string;
+    label: string;
+}
 
 const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //routing
@@ -203,12 +206,13 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     useApp();
     const { accountAddr } = useParams<{ accountAddr: string }>();
     const [validAddr] = useState<boolean>(() => utils.isAddress(accountAddr));
-    const accountObj: { account: Web3Account.Interface; isContract: boolean | undefined } = useAccount(
+    const accountObj: { account: Web3Account.Interface; isContract?: boolean; optionTabs: optionTab[] } = useAccount(
         NETWORK_ID,
         accountAddr,
     );
+    const { optionTabs } = accountObj;
     //Coinbase Api
-    const ethPrice: number = parseFloat(useEthPrice());
+    const ethPrice: number = useEthPrice();
 
     //selection handling
     useEffect(() => {
@@ -219,8 +223,8 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
         }
         //if current hash route is a valid href (excluding first one)
         //set that as selected
-        for (let i = 1; i < ACCOUNT_DETAILS.length; i++) {
-            if ('#' + ACCOUNT_DETAILS[i].href === location.hash) {
+        for (let i = 1; i < optionTabs.length; i++) {
+            if ('#' + optionTabs[i].href === location.hash) {
                 deselect(defRef.current);
                 select(refs.current[i - 1]);
                 return;
@@ -318,7 +322,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                                           100,
                                                   ) / 100
                                                 : '0'}{' '}
-                                            USD {`(${ethPrice}/ETH)`}
+                                            USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
                                         </span>
                                     </div>
                                     <TokenDropDown accountAddr={accountAddr} networkId={NETWORK_ID} />
@@ -349,15 +353,19 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                             to={location.pathname}
                             // isActive={(match, location) => (match !== null ? true : false)}
                         >
-                            {ACCOUNT_DETAILS[0].label}
+                            {optionTabs[0].label}
                         </NavLink>
-                        {ACCOUNT_DETAILS.slice(1, ACCOUNT_DETAILS.length).map((link) => {
+                        {console.log(refs.current)}
+                        {optionTabs.slice(1, optionTabs.length).map((link, i) => {
                             return (
                                 <HashRouter hashType="noslash" key={link.label}>
                                     <NavLink
-                                        ref={(e: HTMLAnchorElement) =>
-                                            refs.current.length < ACCOUNT_DETAILS.length - 1 && refs.current.push(e)
-                                        }
+                                        key={link.label}
+                                        ref={(e: HTMLAnchorElement) => {
+                                            if (refs.current.length < optionTabs.length - 1) {
+                                                refs.current[i] ? (refs.current[i] = e) : refs.current.push(e);
+                                            }
+                                        }}
                                         exact
                                         to={link.href}
                                         // isActive={(match, location) => (match !== null ? true : false)}
@@ -396,6 +404,8 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                             '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
                             '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
                             '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
+                            '#code': <div>contract code</div>,
+                            '#events': <div>events</div>,
                             '#comments': <div>comments</div>,
                         }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
                     </TableWrapper>

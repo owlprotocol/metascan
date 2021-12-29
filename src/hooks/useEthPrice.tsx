@@ -10,5 +10,5 @@ export function useEthPrice() {
             setPrice(data.data.rates.USD);
         })();
     });
-    return price;
+    return parseFloat(price);
 }

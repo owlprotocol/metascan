@@ -46,7 +46,8 @@
         "reselect": "^4.1.5",
         "sass-loader": "^12.4.0",
         "styled-components": "^5.3.3",
-        "web3": "^1.6.1"
+        "web3": "^1.6.1",
+        "web3-utils": "^1.6.1"
     },
     "devDependencies": {
         "@babel/core": "^7.15.8",
