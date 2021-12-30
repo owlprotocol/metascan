@@ -2,11 +2,19 @@ import { ComponentType, useEffect, useRef, useState } from 'react';
 import { useParams, NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
-import { SearchBar, AddressBar, TransactionsTable, TokenTxnsTable, TokenDropDown } from '../../components';
+import {
+    SearchBar,
+    AddressBar,
+    TransactionsTable,
+    TokenTxnsTable,
+    TokenDropDown,
+    ContractCode,
+} from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account } from '@leovigna/web3-redux';
 import { useApp, useAccount, useEthPrice } from '../../hooks';
+import { ERC721, Contract } from '../../hooks/useAccount';
 const NETWORK_ID = '1';
 
 //hardcoded data
@@ -196,8 +204,8 @@ interface optionTab {
 
 interface IAccount {
     account: Account.Interface;
-    isContract?: boolean;
-    isERC721?: boolean;
+    contract?: Contract;
+    ERC721?: ERC721;
     optionTabs: optionTab[];
 }
 
@@ -283,7 +291,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                 <CurrencyDetailsCard>
                                     <AddressBar
                                         address={accountAddr}
-                                        title={accountObj?.isContract === true ? 'Contract' : 'Address'}
+                                        title={accountObj?.contract?.isContract === true ? 'Contract' : 'Address'}
                                         hasQR
                                     />
                                     <div>
@@ -398,7 +406,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                             '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
                             '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
                             '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
-                            '#code': <div>contract code</div>,
+                            '#code': <ContractCode bytecode={accountObj?.contract?.bytecode}></ContractCode>,
                             '#events': <div>events</div>,
                             '#comments': <div>comments</div>,
                         }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
