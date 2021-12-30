@@ -4,7 +4,6 @@ import { LandingPage, BlocksPage, AccountPage, TransactionPage } from './screens
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
 import { useNetworkCreate } from './hooks/index';
-import { useApp } from './hooks/index';
 
 //import ReactGA from 'react-ga';
 
