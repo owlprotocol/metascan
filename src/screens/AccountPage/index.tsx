@@ -13,7 +13,7 @@ import {
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account } from '@leovigna/web3-redux';
-import { useApp, useAccount, useEthPrice } from '../../hooks';
+import { useNetworkCreate, useAccount, useEthPrice } from '../../hooks';
 import { ERC721, Contract } from '../../hooks/useAccount';
 const NETWORK_ID = '1';
 
@@ -216,7 +216,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     const location = useLocation();
 
     //Web3 data fetching
-    useApp();
+    useNetworkCreate();
     const { accountAddr } = useParams<{ accountAddr: string }>();
     const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
     const accountObj: IAccount = useAccount(NETWORK_ID, accountAddr);

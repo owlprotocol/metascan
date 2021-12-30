@@ -1,5 +1,5 @@
 import web3 from 'web3';
-import { useApp, useFetchAccountTokens } from '../../hooks';
+import { useNetworkCreate, useFetchAccountTokens } from '../../hooks';
 
 export interface Props {
     tokenList?: [];
@@ -8,7 +8,7 @@ export interface Props {
 }
 
 function TokenDropDown({ accountAddr, networkId }: Props) {
-    useApp();
+    useNetworkCreate();
     const TokenList = useFetchAccountTokens(networkId, accountAddr);
 
     return (
