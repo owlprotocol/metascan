@@ -56,7 +56,6 @@ export interface Contract {
 function useAccount(networkId: string, accountAddr: string) {
     const dispatch = useDispatch();
 
-    const web3Instance = new Web3(NETWORKS[ChainId.INFURA].WSS);
     const [contract, setContract] = useState<Contract>({ isContract: false });
     const [ERC721, setERC721] = useState<ERC721>({ isERC721: false });
     const [optionTabs, setOptionTabs] = useState<{ href: string; label: string }[]>(EOA_DETAILS);
@@ -67,8 +66,9 @@ function useAccount(networkId: string, accountAddr: string) {
     //     selectCurrContr(networkId, accountAddr),
     // ) as Contract.Interface;
 
-    const item = { networkId: networkId, address: accountAddr };
     useEffect(() => {
+        const web3Instance = new Web3(NETWORKS[ChainId.INFURA].WSS);
+        const item = { networkId: networkId, address: accountAddr };
         (async () => {
             const code = await web3Instance?.eth.getCode(accountAddr);
             if (code === '0x') return;

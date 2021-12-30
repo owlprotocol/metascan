@@ -3,3 +3,4 @@ export { default as useFetchTransactionData } from './useFetchTransactionData';
 export { default as useAccount } from './useAccount';
 export { default as useFetchAccountTokens } from './useFetchAccountTokens';
 export { default as useEthPrice } from './useEthPrice';
+export { default as useFetchEvents } from './useFetchEvents';

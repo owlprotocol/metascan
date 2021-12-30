@@ -202,7 +202,7 @@ function useFetchAccountTokens(networkId: string, accountAddr: string) {
             dispatch(Contract.create({ networkId, ...TokenList[i] }));
             dispatch(Contract.call({ networkId, address: TokenList[i].address, ...CONTR_CALL_ARGS }));
         }
-    }, []);
+    }, [accountAddr, dispatch, networkId]);
     return TokenList;
 }
 
