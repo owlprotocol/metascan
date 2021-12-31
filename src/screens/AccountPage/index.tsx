@@ -15,6 +15,7 @@ import web3 from 'web3';
 import { Account } from '@leovigna/web3-redux';
 import { useNetworkCreate, useAccount, useEthPrice } from '../../hooks';
 import { ERC721, Contract } from '../../hooks/useAccount';
+import EventLog from '../../components/EventLog';
 const NETWORK_ID = '1';
 
 //hardcoded data
@@ -407,7 +408,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                             '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
                             '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
                             '#code': <ContractCode bytecode={accountObj?.contract?.bytecode}></ContractCode>,
-                            '#events': <div>events</div>,
+                            '#events': <EventLog accountAddr={accountAddr}></EventLog>,
                             '#comments': <div>comments</div>,
                         }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
                     </TableWrapper>

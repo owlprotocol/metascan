@@ -91,6 +91,7 @@
         "lint-staged": "^11.1.2",
         "prettier": "^2.3.2",
         "typescript": "4.4.4",
+        "web3-core": "^1.6.1",
         "webpack": "^4.46.0"
     },
     "browserslist": {

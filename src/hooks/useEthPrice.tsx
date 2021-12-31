@@ -6,8 +6,12 @@ function useEthPrice() {
 
     useEffect(() => {
         (async () => {
-            const { data } = await axios.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH');
-            setPrice(data.data.rates.USD);
+            try {
+                const { data } = await axios.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH');
+                setPrice(data.data.rates.USD);
+            } catch (err) {
+                console.log(err);
+            }
         })();
     });
     return parseFloat(price);

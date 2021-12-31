@@ -9,14 +9,14 @@ export interface Props {
 
 function TokenDropDown({ accountAddr, networkId }: Props) {
     useNetworkCreate();
-    const TokenList = useFetchAccountTokens(networkId, accountAddr);
+    const tokenList = useFetchAccountTokens(networkId, accountAddr);
 
     return (
         <div className="flex">
             <div>Tokens</div>
             <div style={{ width: '72%' }}>
                 <select>
-                    {TokenList.map((token) => (
+                    {tokenList.map((token) => (
                         <option key={token.address}>
                             {token.currAccBal ? web3.utils.fromWei(token.currAccBal) : '0'} {token.symbol}
                         </option>
