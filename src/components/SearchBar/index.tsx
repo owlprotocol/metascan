@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import composeHooks from 'react-hooks-compose';
 import { useHistory } from 'react-router-dom';
+import composeHooks from 'react-hooks-compose';
 import { getSearchUrlWithTerm } from '../../utils/searchUtils';
 
 const GradBorderWrapper = styled.div`

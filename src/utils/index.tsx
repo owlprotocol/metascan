@@ -1,1 +1,3 @@
-export const shortenHash = (account: string) => `${account.substring(0, 8)}...${account.substring(account.length - 0)}`;
+export const shortenHashLength = (account: string, length: number) =>
+    `${account.substring(0, length)}...${account.substring(account.length - 0)}`;
+export const shortenHash = (account: string) => shortenHashLength(account, 8);

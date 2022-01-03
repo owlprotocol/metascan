@@ -70,24 +70,23 @@ const BlockItemHeadContainer = styled.div`
 
 interface BlockItem {
     hash: string;
-    method?: string;
-    block: string;
     age: string;
     from: string;
     to: string;
-    value: string;
-    'txn fee'?: string;
+    value?: string;
+    tokenId?: number;
+    token: string;
 }
 
 export interface Props {
     data?: BlockItem[];
-    internal: boolean;
+    ERC721: boolean;
 }
 
-const HEADER_LABELS = ['txn hash', 'method', 'block', 'age', 'from', 'to', 'value', 'txn fee'];
-const INTERNAL_HEADER_LABELS = ['parent txn hash', 'block', 'age', 'from', 'to', 'value'];
+const ERC20_HEADER_LABELS = ['txn hash', 'age', 'from', 'to', 'value', 'token'];
+const ERC721_HEADER_LABELS = ['txn hash', 'age', 'from', 'to', 'token ID', 'token'];
 
-const TransactionsTable = ({ data, internal }: Props) => {
+const TokenTxnsTable = ({ data, ERC721 }: Props) => {
     const tableData = (item: BlockItem, label: string) => {
         // @ts-ignore
         let data = item[label];
@@ -104,14 +103,13 @@ const TransactionsTable = ({ data, internal }: Props) => {
 
         return data;
     };
-
     return (
         <Wrapper>
             <ReactstrapTable responsive>
                 <thead>
                     <tr>
-                        {(internal ? INTERNAL_HEADER_LABELS : HEADER_LABELS).map((label, idx) => (
-                            <th key={idx}>{label}</th>
+                        {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label) => (
+                            <th key={label}>{label}</th>
                         ))}
                     </tr>
                 </thead>
@@ -119,21 +117,17 @@ const TransactionsTable = ({ data, internal }: Props) => {
                     {data?.map((item: BlockItem) => {
                         return (
                             <tr key={item.hash}>
-                                {(internal ? INTERNAL_HEADER_LABELS : HEADER_LABELS).map((label) => (
+                                {(ERC721 ? ERC721_HEADER_LABELS : ERC20_HEADER_LABELS).map((label) => (
                                     <th scope="row" key={label}>
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (
                                                     <Link to={`/txn/${item.hash}`}>{tableData(item, label)}</Link>
                                                 ),
-                                                'parent txn hash': (
-                                                    <Link to={`/txn/${item.hash}`}>{tableData(item, label)}</Link>
-                                                ),
-                                                block: (
-                                                    <Link to={`/block/${item.block}`}>{tableData(item, label)}</Link>
-                                                ),
                                                 from: <Link to={`/txn/${item.from}`}>{tableData(item, label)}</Link>,
                                                 to: <Link to={`/txn/${item.to}`}>{tableData(item, label)}</Link>,
+                                                'token ID': <Link to={'/???'}>{tableData(item, label)}</Link>,
+                                                token: <Link to={'/???'}>{tableData(item, label)}</Link>,
                                             }[label] || tableData(item, label)}
                                         </BlockItemHeadContainer>
                                     </th>
@@ -153,4 +147,4 @@ const TransactionsTable = ({ data, internal }: Props) => {
     );
 };
 
-export default TransactionsTable;
+export default TokenTxnsTable;

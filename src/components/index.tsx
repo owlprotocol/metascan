@@ -6,3 +6,6 @@ export { default as TransactionsTable } from './TransactionsTable';
 export { default as CopyToClipboard } from './CopyToClipboard';
 export { default as TokenPriceCard } from './TokenPriceCard';
 export { default as TokenIcon } from './TokenIcon';
+export { default as TokenTxnsTable } from './TokenTxnsTable';
+export { default as TokenDropDown } from './TokenDropDown';
+export { default as ContractCode } from './ContractCode';
