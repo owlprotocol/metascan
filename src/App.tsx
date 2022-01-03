@@ -25,7 +25,7 @@ function App() {
                             <Route path="/blocks">
                                 <BlocksPage />
                             </Route>
-                            <Route path="/account/:accountAddr">
+                            <Route path="/address/:accountAddr">
                                 <AccountPage />
                             </Route>
                             <Route path="/txn/:txnHash">

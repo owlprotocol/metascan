@@ -1,100 +1,100 @@
 import { ComponentType, useEffect, useRef, useState } from 'react';
-import { useParams, NavLink, HashRouter, withRouter, RouteComponentProps, useLocation } from 'react-router-dom';
+import { useParams, NavLink, HashRouter, useLocation, withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
 import {
     SearchBar,
     AddressBar,
-    TransactionsTable,
-    TokenTxnsTable,
+    // TransactionsTable,
+    // TokenTxnsTable,
     TokenDropDown,
     ContractCode,
+    EventLog,
 } from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
 import { Account } from '@leovigna/web3-redux';
 import { useNetworkCreate, useAccount, useEthPrice } from '../../hooks';
 import { ERC721, Contract } from '../../hooks/useAccount';
-import EventLog from '../../components/EventLog';
 const NETWORK_ID = '1';
 
 //hardcoded data
-const tableData = [
-    {
-        hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        method: 'approveSomethingExtremelyLooooooooongoooooooooooooooooooooooooooooooooooooooooooooooooooooo',
-        block: '1345711',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: 'ENS: ENS Token',
-        value: '1 Ether',
-        'txn fee': '0.001913048528',
-    },
-    {
-        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        method: 'approve',
-        block: '1345711',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: 'ENS: ENS Token',
-        value: '1 Ether',
-        'txn fee': '0.001913048528',
-    },
-];
-const internalTableData = [
-    {
-        hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        block: '1345711',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: 'ENS: ENS Token',
-        value: '1 Ether',
-    },
-    {
-        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        block: '1345711',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: 'ENS: ENS Token',
-        value: '1 Ether',
-    },
-];
-const ERC20Data = [
-    {
-        hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-        value: '1.78',
-        token: 'WETH',
-    },
-    {
-        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-        value: '1.78',
-        token: 'WETH',
-    },
-];
-const ERC721Data = [
-    {
-        hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-        'token ID': 7088,
-        token: 'BAYC',
-    },
-    {
-        hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
-        age: '6 days 10 hrs ago	',
-        from: '0x23908928b70d0b638d0f7544528538c78a6',
-        to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
-        'token ID': 3408,
-        token: 'PUNK',
-    },
-];
+// const tableData = [
+//     {
+//         hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         method: 'approveSomethingExtremelyLooooooooongoooooooooooooooooooooooooooooooooooooooooooooooooooooo',
+//         block: '1345711',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: 'ENS: ENS Token',
+//         value: '1 Ether',
+//         'txn fee': '0.001913048528',
+//     },
+//     {
+//         hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         method: 'approve',
+//         block: '1345711',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: 'ENS: ENS Token',
+//         value: '1 Ether',
+//         'txn fee': '0.001913048528',
+//     },
+// ];
+// const internalTableData = [
+//     {
+//         hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         block: '1345711',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: 'ENS: ENS Token',
+//         value: '1 Ether',
+//     },
+//     {
+//         hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         block: '1345711',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: 'ENS: ENS Token',
+//         value: '1 Ether',
+//     },
+// ];
+// const ERC20Data = [
+//     {
+//         hash: '0x601a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+//         value: '1.78',
+//         token: 'WETH',
+//     },
+//     {
+//         hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+//         value: '1.78',
+//         token: 'WETH',
+//     },
+// ];
+// const ERC721Data = [
+//     {
+//         hash: '0x610a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+//         'token ID': 7088,
+//         token: 'BAYC',
+//     },
+//     {
+//         hash: '0x611a0e4ac70c63b9eed284213d8d2e70cc31029b',
+//         age: '6 days 10 hrs ago	',
+//         from: '0x23908928b70d0b638d0f7544528538c78a6',
+//         to: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0',
+//         'token ID': 3408,
+//         token: 'PUNK',
+//     },
+// ];
 
 const Wrapper = styled.div`
     .container {
@@ -184,16 +184,16 @@ const CurrencyDetailsCard = styled(MetascanCardWrapper)`
 
 const Navigation = styled(NavigationWrapper)``;
 
-const StatementText = styled.div`
-    font-size: 16px;
-    line-height: 28px;
-    color: #8e9192;
-    margin-bottom: 60px;
+// const StatementText = styled.div`
+//     font-size: 16px;
+//     line-height: 28px;
+//     color: #8e9192;
+//     margin-bottom: 60px;
 
-    span {
-        color: #4fd8eb;
-    }
-`;
+//     span {
+//         color: #4fd8eb;
+//     }
+// `;
 
 const TableWrapper = styled.div`
     padding: 12px 22px 5vw;
@@ -210,7 +210,7 @@ interface IAccount {
     optionTabs: optionTab[];
 }
 
-const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
+const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) => {
     //routing
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
@@ -225,7 +225,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //Coinbase Api
     const ethPrice: number = useEthPrice();
 
-    //selection handling
+    // selection handling
     useEffect(() => {
         if (defRef.current === null) return;
         //on each route change, set all route options except first one to white
@@ -280,10 +280,10 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                         <Row>
                             <Col xs="12" md="3">
                                 <AccountDetailsCard>
-                                    <div>First balance change</div>
+                                    {/* <div>First balance change</div>
                                     <div>Received {firstBalanceChange} ago</div>
                                     <div>Last balance change</div>
-                                    <div>Sent {lastBalanceChange} ago</div>
+                                    <div>Sent {lastBalanceChange} ago</div> */}
                                     <div>Transaction count</div>
                                     <div>{accountObj?.account?.nonce ? accountObj.account.nonce : '0'}</div>
                                 </AccountDetailsCard>
@@ -312,7 +312,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                                 fill="white"
                                             />
                                         </svg>
-                                        <a href="/">View address on other chains</a>
+                                        {/* <a href="/">View address on other chains</a> */}
                                     </div>
                                     <div className="flex">
                                         <span>Balance</span>
@@ -327,11 +327,10 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                         <span>Ether Value</span>
                                         <span>
                                             {accountObj?.account?.balance
-                                                ? Math.round(
+                                                ? (
                                                       parseFloat(web3.utils.fromWei(accountObj.account.balance)) *
-                                                          ethPrice *
-                                                          100,
-                                                  ) / 100
+                                                      ethPrice
+                                                  ).toFixed(2)
                                                 : '0'}{' '}
                                             USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
                                         </span>
@@ -339,7 +338,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                     <TokenDropDown accountAddr={accountAddr as string} networkId={NETWORK_ID} />
                                 </CurrencyDetailsCard>
                             </Col>
-                            <Col xs="12" md="3">
+                            {/* <Col xs="12" md="3">
                                 <AccountDetailsCard>
                                     <div>More Info</div>
                                     <div>
@@ -347,7 +346,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                         <a href="/login">Login</a>
                                     </div>
                                 </AccountDetailsCard>
-                            </Col>
+                            </Col> */}
                         </Row>
                     ) : (
                         <div>Invalid Ethereum Address</div>
@@ -359,7 +358,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                 <Container>
                     <Navigation>
                         <NavLink ref={defRef} exact to={location.pathname}>
-                            {optionTabs[0].label}
+                            {optionTabs[0]?.label}
                         </NavLink>
                         {optionTabs.slice(1, optionTabs.length).map((link, i) => {
                             return (
@@ -398,19 +397,19 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                         </button>
                     </Navigation>
 
-                    <StatementText>
+                    {/* <StatementText>
                         Latest 25 from a total of <span>3,688</span> transactions
-                    </StatementText>
+                    </StatementText> */}
 
                     <TableWrapper>
                         {{
-                            '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
-                            '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
-                            '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
-                            '#code': <ContractCode bytecode={accountObj?.contract?.bytecode}></ContractCode>,
+                            // '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
+                            // '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
+                            // '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
+                            '#code': <ContractCode bytecode={accountObj?.contract?.bytecode} />,
                             '#events': <EventLog accountAddr={accountAddr}></EventLog>,
-                            '#comments': <div>comments</div>,
-                        }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
+                            // '#comments': <div>comments</div>,
+                        }[location.hash] || /*<TransactionsTable data={tableData} internal={false}/>*/ <div></div>}
                     </TableWrapper>
                 </Container>
             )}
