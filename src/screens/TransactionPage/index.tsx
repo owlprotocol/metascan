@@ -1,12 +1,18 @@
+import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
-import { SearchBar, AddressBar, CopyToClipboard, TokenPriceCard } from '../../components';
-import { NAV_LINKS } from '../../constants';
-import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
+import { SearchBar, AddressBar, CopyToClipboard /*, TokenPriceCard*/ } from '../../components';
+// import { NAV_LINKS } from '../../constants';
+import { MetascanCardWrapper /*, NavigationWrapper */ } from '../../styles/Common';
 import { ReactComponent as QuestionMarkIcon } from '../../icons/questionMark.svg';
-import { useNetworkCreate, useFetchTransactionData } from '../../hooks';
+import { useNetworkCreate, useFetchTransactionData, useEthPrice } from '../../hooks';
 import composeHooks from 'react-hooks-compose';
+import Web3 from 'web3';
+import { NETWORKS, ChainId } from '../../constants/network';
+import { TransactionReceipt } from 'web3-core';
+
+const web3Url = NETWORKS[ChainId.INFURA].WSS as string;
 
 const Wrapper = styled.div`
     padding-bottom: 10vw;
@@ -102,9 +108,9 @@ const DetailsTitle = styled.div`
     color: rgba(112, 121, 123, 0.7);
 `;
 
-const Navigation = styled(NavigationWrapper)`
-    margin-bottom: 0;
-`;
+// const Navigation = styled(NavigationWrapper)`
+//     margin-bottom: 0;
+// `;
 
 const TxnDataWrapper = styled.div`
     padding: 12px 22px 5vw;
@@ -158,18 +164,18 @@ const TxnDataWrapper = styled.div`
     }
 `;
 
-const SeeMoreButton = styled.div`
-    display: flex;
-    align-items: center;
-    color: #5092c5;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 25px;
+// const SeeMoreButton = styled.div`
+//     display: flex;
+//     align-items: center;
+//     color: #5092c5;
+//     font-weight: 500;
+//     font-size: 20px;
+//     line-height: 25px;
 
-    svg {
-        margin-left: 12px;
-    }
-`;
+//     svg {
+//         margin-left: 12px;
+//     }
+// `;
 
 const TxnStatusWrapper = styled.div`
     background: #cde7ec;
@@ -197,18 +203,39 @@ const TxnStatusWrapper = styled.div`
 const useTransactionPageHook = () => {
     useNetworkCreate();
     const params = useParams();
-
     // Deploy throws on: Property 'txnHash' does not exist on type '{}'.  TS2339
     // @ts-ignore
     const { txnHash } = params as string;
     const transactionData = useFetchTransactionData(txnHash) as PresenterProps;
-    if (!transactionData) return;
-    return transactionData;
+
+    //can be replaced once web3-redux tracks latest block number
+    const [transaction, setTransaction] = useState(transactionData);
+    useEffect(() => {
+        (async () => {
+            const web3 = new Web3(web3Url);
+            const currBlockNum = await web3.eth.getBlockNumber();
+            const transactionReceipt: TransactionReceipt = await web3.eth.getTransactionReceipt(txnHash);
+            const txFee = Web3.utils.fromWei(
+                //@ts-ignore effectiveGasPrice not in TransactionReceipt interface
+                (transactionReceipt.gasUsed * Web3.utils.hexToNumber(transactionReceipt.effectiveGasPrice)).toString(),
+            );
+            if (!transactionData) return;
+            setTransaction({
+                ...transactionData,
+                confirmations: (currBlockNum - parseInt(transactionData.blockNumber!)).toString(),
+                txFee,
+                value: Web3.utils.fromWei(transactionData.value || '0'),
+            });
+        })();
+    }, [txnHash, transactionData]);
+
+    if (!transaction) return;
+    console.log(transaction);
+    return transaction;
 };
 
 interface PresenterProps {
     hash?: string;
-    txnFee?: string;
     gasPrice?: string;
     confirmations?: string;
     recipient?: string;
@@ -221,7 +248,6 @@ interface PresenterProps {
 
 const TransactionPagePresenter = ({
     hash = '',
-    txnFee = '',
     gasPrice = '',
     confirmations = '',
     recipient = '',
@@ -231,6 +257,7 @@ const TransactionPagePresenter = ({
     value = '',
     txFee = '',
 }: PresenterProps) => {
+    const ethPrice = useEthPrice();
     return (
         <Wrapper>
             <HeroWrapper>
@@ -266,9 +293,9 @@ const TransactionPagePresenter = ({
                             <AccountDetailsCard>
                                 <AddressBar address={hash} title="Transaction Hash" />
                                 <DetailsTitle>Amount Transacted</DetailsTitle>
-                                <div>{value}</div>
+                                <div>{value} ETH</div>
                                 <DetailsTitle>Transaction Fee</DetailsTitle>
-                                <div>{txnFee}</div>
+                                <div>{txFee} ETH</div>
                             </AccountDetailsCard>
                         </Col>
                         <Col xs="12" md="6">
@@ -308,7 +335,7 @@ const TransactionPagePresenter = ({
                                 </TxnStatusWrapper>
 
                                 <div className="flex">
-                                    <div>
+                                    {/* <div>
                                         <svg
                                             width="6"
                                             height="14"
@@ -339,7 +366,7 @@ const TransactionPagePresenter = ({
                                         </svg>
 
                                         <a href="/receipt">Transaction receipt</a>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div>
@@ -348,17 +375,17 @@ const TransactionPagePresenter = ({
                                 </div>
                             </CurrencyDetailsCard>
                         </Col>
-                        <Col xs="12" md="3">
+                        {/* <Col xs="12" md="3">
                             <AccountDetailsCard>
                                 <TokenPriceCard />
                             </AccountDetailsCard>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Container>
             </HeroWrapper>
 
             <Container>
-                <Navigation>
+                {/* <Navigation>
                     {NAV_LINKS.map((link, key) => (
                         <NavLink to={link.href} key={key}>
                             {link.label}
@@ -376,7 +403,7 @@ const TransactionPagePresenter = ({
                             />
                         </svg>
                     </button>
-                </Navigation>
+                </Navigation> */}
 
                 <TxnDataWrapper>
                     <div>
@@ -389,16 +416,6 @@ const TransactionPagePresenter = ({
                                 <NavLink to={`/block/${blockNumber}`}>{blockNumber}</NavLink>
                             </span>
                         </div>
-                        <div>
-                            <span className="title">
-                                <QuestionMarkIcon />
-                                Timestamp
-                            </span>
-                            <span>
-                                10 days 14 hrs ago (Nov 29 2021 02:24:15 PM +UTC)
-                                <span className="sm-text"> | Confirmed within 1 minute</span>
-                            </span>
-                        </div>
                     </div>
                     <div>
                         <div>
@@ -406,9 +423,9 @@ const TransactionPagePresenter = ({
                                 <QuestionMarkIcon />
                                 Gas price
                             </span>
-                            <span>{gasPrice}</span>
+                            <span>{Web3.utils.fromWei(Web3.utils.hexToNumberString(gasPrice))} Ether</span>
                         </div>
-                        <div>
+                        {/* <div>
                             <span className="title">
                                 <QuestionMarkIcon />
                                 Timestamp
@@ -417,7 +434,7 @@ const TransactionPagePresenter = ({
                                 10 days 14 hrs ago (Nov 29 2021 02:24:15 PM +UTC)
                                 <span className="sm-text"> | Confirmed within 1 minute</span>
                             </span>
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <div>
@@ -449,17 +466,21 @@ const TransactionPagePresenter = ({
                                 <QuestionMarkIcon />
                                 Value
                             </span>
-                            <span>{value} ETH (0.0) $</span>
+                            <span>
+                                {value} ETH ({(ethPrice * parseFloat(value)).toFixed(2)}) $
+                            </span>
                         </div>
                         <div>
                             <span className="title">
                                 <QuestionMarkIcon />
                                 Transaction fee
                             </span>
-                            <span>{txFee} Ether (0.0) $</span>
+                            <span>
+                                {txFee} Ether ({(ethPrice * parseFloat(txFee)).toFixed(2)}) $
+                            </span>
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <div>
                             <span className="title">
                                 <QuestionMarkIcon />
@@ -499,7 +520,7 @@ const TransactionPagePresenter = ({
                                 <a href="#">To access the Private note feature, you must be Logged In</a>
                             </span>
                         </div>
-                    </div>
+                    </div> */}
                 </TxnDataWrapper>
             </Container>
         </Wrapper>

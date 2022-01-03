@@ -9,3 +9,4 @@ export { default as TokenIcon } from './TokenIcon';
 export { default as TokenTxnsTable } from './TokenTxnsTable';
 export { default as TokenDropDown } from './TokenDropDown';
 export { default as ContractCode } from './ContractCode';
+export { default as EventLog } from './EventLog';
