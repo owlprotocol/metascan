@@ -1,7 +1,9 @@
-import styled from 'styled-components';
 import { useState } from 'react';
+import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import web3 from 'web3';
+import composeHooks from 'react-hooks-compose';
+import { useHistory } from 'react-router-dom';
+import { getSearchUrlWithTerm } from '../../utils/searchUtils';
 
 const GradBorderWrapper = styled.div`
     background: linear-gradient(269.68deg, #00f3b9 8.63%, #2091f9 50.28%);
@@ -57,20 +59,38 @@ const FormWrapper = styled.form`
 
 const PLACEHOLDER_TEXT = 'Search for transactions, addresses, blocks, embedded text data....';
 
-const SearchBar = () => {
-    const [searchInput, setSearchInput] = useState<string>('');
+const useSearchBarHook = () => {
     const history = useHistory();
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const handleChange = ({ target }: any) => {
-        setSearchInput(target.value);
+    const handleInputKeyPress = (event: any) => {
+        if (event.which === 13) {
+            submitSearch();
+        }
     };
 
-    const handleSubmit = (/*e: any*/) => {
-        // e.preventDefault();
-        if (web3.utils.isAddress(searchInput)) history.push(`/account/${searchInput}`);
-        setSearchInput('');
+    const submitSearch = () => {
+        if (!searchTerm) return;
+
+        const searchUrlWithTerm = getSearchUrlWithTerm(searchTerm);
+        history.push(searchUrlWithTerm);
     };
 
+    return {
+        searchTerm,
+        setSearchTerm,
+        submitSearch,
+        handleInputKeyPress,
+    };
+};
+
+export interface PresenterProps {
+    setSearchTerm?: (t: any) => null;
+    submitSearch?: (t: any) => null;
+    handleInputKeyPress?: (t: any) => null;
+}
+
+const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInputKeyPress }: PresenterProps) => {
     return (
         <GradBorderWrapper>
             <FormWrapper onSubmit={handleSubmit}>
@@ -84,8 +104,13 @@ const SearchBar = () => {
                     </svg>
                 </button>
 
-                <input placeholder={PLACEHOLDER_TEXT} value={searchInput} onChange={handleChange} />
-
+                <input
+                    placeholder={PLACEHOLDER_TEXT}
+                    onChange={({ target }) => setSearchTerm(target.value)}
+                    autoComplete="false"
+                    onKeyPress={handleInputKeyPress}
+                />
+        
                 <div>
                     <button className="btn-camera">
                         <svg width="29" height="27" viewBox="0 0 29 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +121,7 @@ const SearchBar = () => {
                             />
                         </svg>
                     </button>
-                    <button className="btn-search">
+                    <button className="btn-search" onClick={submitSearch}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M23.166 22.0616L18.425 17.3206C20.0993 15.3267 20.9392 12.7635 20.7696 10.1654C20.6 7.56736 19.434 5.13506 17.5148 3.37573C15.5956 1.6164 13.0713 0.665865 10.4683 0.722351C7.86535 0.778838 5.38465 1.83798 3.54356 3.67891C1.70247 5.51985 0.643101 8.00044 0.586385 10.6034C0.529668 13.2064 1.47998 15.7308 3.23914 17.6501C4.9983 19.5695 7.4305 20.7357 10.0285 20.9055C12.6266 21.0753 15.1899 20.2357 17.1839 18.5616L21.925 23.3026C22.0895 23.4672 22.3127 23.5596 22.5455 23.5596C22.7782 23.5596 23.0014 23.4672 23.166 23.3026C23.3305 23.1381 23.423 22.9149 23.423 22.6821C23.423 22.4494 23.3305 22.2262 23.166 22.0616ZM2.36361 10.8358C2.36361 9.18701 2.85252 7.57528 3.76852 6.20439C4.68452 4.8335 5.98647 3.76502 7.50972 3.13407C9.03297 2.50312 10.7091 2.33804 12.3262 2.65969C13.9433 2.98135 15.4286 3.7753 16.5945 4.94115C17.7603 6.10699 18.5543 7.59237 18.8759 9.20944C19.1976 10.8265 19.0325 12.5027 18.4016 14.0259C17.7706 15.5492 16.7021 16.8511 15.3312 17.7671C13.9603 18.6831 12.3486 19.172 10.6999 19.172C8.48972 19.1695 6.37081 18.2904 4.808 16.7276C3.24519 15.1648 2.36611 13.0459 2.36361 10.8358Z"
@@ -110,4 +135,8 @@ const SearchBar = () => {
     );
 };
 
-export default SearchBar;
+const SearchBarContainer = composeHooks(() => ({
+    useSearchBar: () => useSearchBarHook(),
+}))(SearchBarPresenter) as (props: any) => JSX.Element;
+
+export default SearchBarContainer;
