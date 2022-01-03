@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import composeHooks from 'react-hooks-compose';
-import { useHistory } from 'react-router-dom';
 import { getSearchUrlWithTerm } from '../../utils/searchUtils';
 
 const GradBorderWrapper = styled.div`
@@ -13,7 +12,7 @@ const GradBorderWrapper = styled.div`
     padding: 2px;
 `;
 
-const FormWrapper = styled.form`
+const Wrapper = styled.div`
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -93,7 +92,7 @@ export interface PresenterProps {
 const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInputKeyPress }: PresenterProps) => {
     return (
         <GradBorderWrapper>
-            <FormWrapper onSubmit={handleSubmit}>
+            <Wrapper>
                 <button className="btn-menu">
                     <svg width="30" height="19" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -110,7 +109,7 @@ const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInpu
                     autoComplete="false"
                     onKeyPress={handleInputKeyPress}
                 />
-        
+
                 <div>
                     <button className="btn-camera">
                         <svg width="29" height="27" viewBox="0 0 29 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,7 +129,7 @@ const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInpu
                         </svg>
                     </button>
                 </div>
-            </FormWrapper>
+            </Wrapper>
         </GradBorderWrapper>
     );
 };

@@ -219,8 +219,8 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     //Web3 data fetching
     useNetworkCreate();
     const { accountAddr } = useParams<{ accountAddr: string }>();
-    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr));
-    const accountObj: IAccount = useAccount(NETWORK_ID, accountAddr);
+    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr as string));
+    const accountObj: IAccount = useAccount(NETWORK_ID, accountAddr as string);
     const { optionTabs } = accountObj;
     //Coinbase Api
     const ethPrice: number = useEthPrice();
@@ -336,7 +336,7 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                             USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
                                         </span>
                                     </div>
-                                    <TokenDropDown accountAddr={accountAddr} networkId={NETWORK_ID} />
+                                    <TokenDropDown accountAddr={accountAddr as string} networkId={NETWORK_ID} />
                                 </CurrencyDetailsCard>
                             </Col>
                             <Col xs="12" md="3">
