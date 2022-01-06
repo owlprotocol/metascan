@@ -96,7 +96,7 @@ function useAccount(networkId: string, accountAddr: string) {
         dispatch(Account.create(item));
         dispatch(Account.fetchBalance(item));
         dispatch(Account.fetchNonce(item));
-    }, [accountAddr, dispatch, networkId]);
+    }, [accountAddr, dispatch, networkId, validAddr]);
     return { account, contract, optionTabs, ERC721 };
 }
 
