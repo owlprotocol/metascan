@@ -226,7 +226,7 @@ const useTransactionPageHook = () => {
 
             setTransaction({
                 ...transactionData,
-                confirmations: (currBlockNum - parseInt(transactionData.blockNumber!)).toString(),
+                confirmations: (currBlockNum - parseInt(transactionData.blockNumber || '0')).toString(),
                 txFee,
                 value: Web3.utils.fromWei(transactionData.value || '0'),
             });
