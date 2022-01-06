@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Table } from '../../components';
+import { SearchBar } from '../../components';
 
 const Headline = styled.div`
     font-size: 36px;
@@ -12,11 +12,22 @@ const Headline = styled.div`
     }
 `;
 
+const SearchBarWrapper = styled.div`
+    max-width: 936px;
+    margin: 0 auto;
+    top: -25px;
+    position: relative;
+    z-index: 1;
+`;
+
 const Wrapper = styled.div``;
 
-const BlocksPage = () => {
+const ErrorPage = () => {
     return (
         <Wrapper>
+            <SearchBarWrapper>
+                <SearchBar />
+            </SearchBarWrapper>
             <Headline>
                 <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -28,11 +39,10 @@ const BlocksPage = () => {
                         fill="#F5F5F5"
                     />
                 </svg>
-                Ethereum Blocks
+                Error - Invalid String
             </Headline>
-            <Table data={[]} />
         </Wrapper>
     );
 };
 
-export default BlocksPage;
+export default ErrorPage;

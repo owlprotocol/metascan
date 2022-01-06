@@ -76,7 +76,6 @@ const EventLog = ({ accountAddr }: any) => {
     const tableData = (item: Log & { eventSig: EventSignature }, label: string) => {
         // @ts-ignore
         let data = item[label];
-        console.log(item);
         switch (label) {
             case 'txn hash':
                 data = shortenHash(item['transactionHash']);

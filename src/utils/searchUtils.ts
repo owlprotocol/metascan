@@ -1,18 +1,16 @@
-import Web3 from 'web3';
-
 /**
  * Return the matching path for any search term
  * @param searchTerm search term can be Block number / Block hash / Transaction / Address.
  */
 export const getSearchUrlWithTerm = (searchTerm: string) => {
-    if (validateBlockNumber(searchTerm)) {
-        return `/block/${searchTerm}/`;
+    // if (validateBlockNumber(searchTerm)) {
+    //     return `/block/${searchTerm}/`;
+    /* } else*/ if (validateTransactionHash(searchTerm)) {
+        return `/txn/${searchTerm}`;
     } else if (validateAddress(searchTerm)) {
-        return `/address/${searchTerm}`;
-    } else if (validateTransactionHash(searchTerm)) {
-        return `/txn/${searchTerm}/`;
+        return `/address/${searchTerm}/`;
     } else {
-        return '/';
+        return '/error';
     }
 };
 
@@ -32,7 +30,8 @@ export const validateBlockNumber = (string: string) => {
  * @returns a boolean of whether the term is an address or not
  */
 export const validateAddress = (string: string) => {
-    return Web3.utils.isAddress(string);
+    if (string.length !== 42) return false;
+    return validateHex(string);
 };
 
 /**
@@ -41,6 +40,15 @@ export const validateAddress = (string: string) => {
  * @returns boolean indicates if hash is valid or not
  */
 export const validateTransactionHash = (string: string) => {
-    const regexExp = /^0x|[a-f0-9]{64}$/gi;
-    return regexExp.test(string);
+    if (string.length !== 66) return false;
+    return validateHex(string);
+};
+
+const validateHex = (string: string) => {
+    const hexChars = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    if (string.substring(0, 2) !== '0x') return false;
+    for (let i = 2; i < string.length; i++) {
+        if (!hexChars.includes(string.charAt(i).toLowerCase())) return false;
+    }
+    return true;
 };

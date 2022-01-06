@@ -67,9 +67,7 @@ const Header = () => {
     return (
         // @ts-ignore
         <Wrapper className="layout-header" height={isHomePage ? '100px' : '150px'}>
-            <div>
-                <NavLink to="/">Logo</NavLink>
-            </div>
+            <div>{/* <NavLink to="/">Logo</NavLink> */}</div>
             <div>
                 <nav>
                     <NavLink to="/Blockchains">Blockchains</NavLink>

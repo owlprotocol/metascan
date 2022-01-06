@@ -1,4 +1,4 @@
-import { ComponentType, useEffect, useRef, useState } from 'react';
+import { ComponentType, useEffect, useRef } from 'react';
 import { useParams, NavLink, HashRouter, useLocation, withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
@@ -9,7 +9,7 @@ import {
     // TokenTxnsTable,
     TokenDropDown,
     ContractCode,
-    EventLog,
+    // EventLog,
 } from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
@@ -219,9 +219,8 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
     //Web3 data fetching
     useNetworkCreate();
     const { accountAddr } = useParams<{ accountAddr: string }>();
-    const [validAddr] = useState<boolean>(() => web3.utils.isAddress(accountAddr as string));
-    const accountObj: IAccount = useAccount(NETWORK_ID, accountAddr as string);
-    const { optionTabs } = accountObj;
+    const accountObj: IAccount | undefined = useAccount(NETWORK_ID, accountAddr as string);
+    const { account, contract, optionTabs } = accountObj;
     //Coinbase Api
     const ethPrice: number = useEthPrice();
 
@@ -275,8 +274,7 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                             Ethereum Account
                         </Headline>
                     </Row>
-
-                    {validAddr ? (
+                    {account ? (
                         <Row>
                             <Col xs="12" md="3">
                                 <AccountDetailsCard>
@@ -285,14 +283,14 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                                     <div>Last balance change</div>
                                     <div>Sent {lastBalanceChange} ago</div> */}
                                     <div>Transaction count</div>
-                                    <div>{accountObj?.account?.nonce ? accountObj.account.nonce : '0'}</div>
+                                    <div>{account?.nonce ? account.nonce : '0'}</div>
                                 </AccountDetailsCard>
                             </Col>
                             <Col xs="12" md="6">
                                 <CurrencyDetailsCard>
                                     <AddressBar
                                         address={accountAddr}
-                                        title={accountObj?.contract?.isContract === true ? 'Contract' : 'Address'}
+                                        title={contract?.isContract === true ? 'Contract' : 'Address'}
                                         hasQR
                                     />
                                     <div>
@@ -316,21 +314,15 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                                     </div>
                                     <div className="flex">
                                         <span>Balance</span>
-                                        <span>
-                                            {accountObj?.account?.balance
-                                                ? web3.utils.fromWei(accountObj.account.balance)
-                                                : '0'}{' '}
-                                            ETH
-                                        </span>
+                                        <span>{account?.balance ? web3.utils.fromWei(account.balance) : '0'} ETH</span>
                                     </div>
                                     <div className="flex">
                                         <span>Ether Value</span>
                                         <span>
-                                            {accountObj?.account?.balance
-                                                ? (
-                                                      parseFloat(web3.utils.fromWei(accountObj.account.balance)) *
-                                                      ethPrice
-                                                  ).toFixed(2)
+                                            {account?.balance
+                                                ? (parseFloat(web3.utils.fromWei(account.balance)) * ethPrice).toFixed(
+                                                      2,
+                                                  )
                                                 : '0'}{' '}
                                             USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
                                         </span>
@@ -354,18 +346,18 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                 </Container>
             </HeroWrapper>
 
-            {validAddr && (
+            {account && optionTabs?.length !== 0 && (
                 <Container>
                     <Navigation>
                         <NavLink ref={defRef} exact to={location.pathname}>
-                            {optionTabs[0]?.label}
+                            {optionTabs[0].label}
                         </NavLink>
-                        {optionTabs.slice(1, optionTabs.length).map((link, i) => {
+                        {optionTabs?.slice(1, optionTabs?.length).map((link, i) => {
                             return (
                                 <HashRouter hashType="noslash" key={link.label}>
                                     <NavLink
                                         ref={(e: HTMLAnchorElement) => {
-                                            if (refs.current.length < optionTabs.length - 1) {
+                                            if (refs.current.length < optionTabs?.length - 1) {
                                                 refs.current[i] ? (refs.current[i] = e) : refs.current.push(e);
                                             }
                                         }}
@@ -406,10 +398,14 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                             // '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
                             // '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
                             // '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
-                            '#code': <ContractCode bytecode={accountObj?.contract?.bytecode} />,
-                            '#events': <EventLog accountAddr={accountAddr}></EventLog>,
+                            // '#code': <ContractCode bytecode={contract?.bytecode} />,
+                            // '#events': <EventLog accountAddr={accountAddr}></EventLog>,
                             // '#comments': <div>comments</div>,
-                        }[location.hash] || /*<TransactionsTable data={tableData} internal={false}/>*/ <div></div>}
+                        }[location.hash] || (
+                            /*<TransactionsTable data={tableData} internal={false}/>*/ <ContractCode
+                                bytecode={contract?.bytecode}
+                            />
+                        )}
                     </TableWrapper>
                 </Container>
             )}
