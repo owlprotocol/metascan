@@ -64,6 +64,7 @@ const useSearchBarHook = () => {
 
     const handleInputKeyPress = (event: any) => {
         if (event.which === 13) {
+            setSearchTerm('');
             submitSearch();
         }
     };
@@ -84,12 +85,18 @@ const useSearchBarHook = () => {
 };
 
 export interface PresenterProps {
+    searchTerm?: string;
     setSearchTerm?: (t: any) => null;
     submitSearch?: (t: any) => null;
     handleInputKeyPress?: (t: any) => null;
 }
 
-const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInputKeyPress }: PresenterProps) => {
+const SearchBarPresenter = ({
+    searchTerm,
+    setSearchTerm = (t) => t,
+    submitSearch,
+    handleInputKeyPress,
+}: PresenterProps) => {
     return (
         <GradBorderWrapper>
             <Wrapper onSubmit={submitSearch}>
@@ -105,6 +112,7 @@ const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInpu
 
                 <input
                     placeholder={PLACEHOLDER_TEXT}
+                    value={searchTerm}
                     onChange={({ target }) => setSearchTerm(target.value)}
                     autoComplete="false"
                     onKeyPress={handleInputKeyPress}
