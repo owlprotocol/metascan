@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { NavLink, useLocation } from 'react-router-dom';
+import { /*NavLink,*/ useLocation } from 'react-router-dom';
 
 const Wrapper = styled.div`
     background-color: ${(props) => props.theme.primary};
@@ -29,36 +29,36 @@ const Wrapper = styled.div`
     }
 `;
 
-const ButtonLink = styled(NavLink)`
-    background: #008392;
-    color: #fff;
-    border-radius: 10px;
-    margin: 0;
-    margin-left: 12px;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 66px;
-    width: 130px;
-    height: 66px;
-    display: inline-block;
-    text-align: center;
-`;
+// const ButtonLink = styled(NavLink)`
+//     background: #008392;
+//     color: #fff;
+//     border-radius: 10px;
+//     margin: 0;
+//     margin-left: 12px;
+//     font-weight: bold;
+//     font-size: 18px;
+//     line-height: 66px;
+//     width: 130px;
+//     height: 66px;
+//     display: inline-block;
+//     text-align: center;
+// `;
 
-const PrefsButton = styled.div`
-    background-color: #627b7f;
-    text-transform: uppercase;
-    border-radius: 10px;
-    width: 160px;
-    height: 66px;
-    line-height: 66px;
-    display: inline-block;
-    text-align: center;
-    margin-left: 12px;
+// const PrefsButton = styled.div`
+//     background-color: #627b7f;
+//     text-transform: uppercase;
+//     border-radius: 10px;
+//     width: 160px;
+//     height: 66px;
+//     line-height: 66px;
+//     display: inline-block;
+//     text-align: center;
+//     margin-left: 12px;
 
-    span {
-        margin: 0 17px;
-    }
-`;
+//     span {
+//         margin: 0 17px;
+//     }
+// `;
 
 const Header = () => {
     const location = useLocation();
@@ -68,7 +68,7 @@ const Header = () => {
         // @ts-ignore
         <Wrapper className="layout-header" height={isHomePage ? '100px' : '150px'}>
             <div>{/* <NavLink to="/">Logo</NavLink> */}</div>
-            <div>
+            {/* <div>
                 <nav>
                     <NavLink to="/Blockchains">Blockchains</NavLink>
                     <NavLink to="/Products">Products</NavLink>
@@ -82,7 +82,7 @@ const Header = () => {
                 </PrefsButton>
 
                 <ButtonLink to="/login">Login</ButtonLink>
-            </div>
+            </div> */}
         </Wrapper>
     );
 };
