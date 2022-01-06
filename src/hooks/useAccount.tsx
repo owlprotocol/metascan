@@ -54,6 +54,8 @@ export interface Contract {
 }
 
 function useAccount(networkId: string, accountAddr: string) {
+    const [validAddr] = useState<boolean>(() => Web3.utils.isAddress(accountAddr as string));
+
     const dispatch = useDispatch();
 
     const [contract, setContract] = useState<Contract>({ isContract: false });
@@ -67,6 +69,7 @@ function useAccount(networkId: string, accountAddr: string) {
     // ) as Contract.Interface;
 
     useEffect(() => {
+        if (!validAddr) return;
         const web3Instance = new Web3(NETWORKS[ChainId.INFURA].WSS);
         const item = { networkId: networkId, address: accountAddr };
         (async () => {

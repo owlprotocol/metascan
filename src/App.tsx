@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LayoutWrapper from './layout';
-import { LandingPage, BlocksPage, AccountPage, TransactionPage } from './screens';
+import { LandingPage, BlocksPage, AccountPage, TransactionPage, ErrorPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
 import { useNetworkCreate } from './hooks/index';
@@ -31,9 +31,12 @@ function App() {
                             <Route path="/txn/:txnHash">
                                 <TransactionPage />
                             </Route>
-                            {/* <Route path="/block/:blockNumber">
-                                <BlockPage />
-                            </Route> */}
+                            <Route path="/block/:blockNumber">
+                                <BlocksPage />
+                            </Route>
+                            <Route path="/error">
+                                <ErrorPage />
+                            </Route>
                         </LayoutWrapper>
                     </Switch>
                 </Router>

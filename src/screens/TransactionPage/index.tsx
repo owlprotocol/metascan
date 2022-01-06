@@ -215,11 +215,15 @@ const useTransactionPageHook = () => {
             const web3 = new Web3(web3Url);
             const currBlockNum = await web3.eth.getBlockNumber();
             const transactionReceipt: TransactionReceipt = await web3.eth.getTransactionReceipt(txnHash);
-            const txFee = Web3.utils.fromWei(
-                //@ts-ignore effectiveGasPrice not in TransactionReceipt interface
-                (transactionReceipt.gasUsed * Web3.utils.hexToNumber(transactionReceipt.effectiveGasPrice)).toString(),
-            );
+            let txFee = '';
+            if (transactionReceipt)
+                txFee = Web3.utils.fromWei(
+                    //@ts-ignore effectiveGasPrice not in TransactionReceipt interface
+                    (transactionReceipt.gasUsed * Web3.utils.hexToNumber(transactionReceipt.effectiveGasPrice)) //@ts-ignore
+                        .toString(),
+                );
             if (!transactionData) return;
+
             setTransaction({
                 ...transactionData,
                 confirmations: (currBlockNum - parseInt(transactionData.blockNumber!)).toString(),
@@ -230,7 +234,6 @@ const useTransactionPageHook = () => {
     }, [txnHash, transactionData]);
 
     if (!transaction) return;
-    console.log(transaction);
     return transaction;
 };
 
@@ -413,7 +416,9 @@ const TransactionPagePresenter = ({
                                 Block
                             </span>
                             <span>
-                                <NavLink to={`/block/${blockNumber}`}>{blockNumber}</NavLink>
+                                {/* <NavLink to={`/block/${blockNumber}`}> */}
+                                {blockNumber}
+                                {/* </NavLink> */}
                             </span>
                         </div>
                     </div>

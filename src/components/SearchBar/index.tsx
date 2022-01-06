@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import composeHooks from 'react-hooks-compose';
+// import composeHooks from 'react-hooks-compose';
 import { getSearchUrlWithTerm } from '../../utils/searchUtils';
 
 const GradBorderWrapper = styled.div`
@@ -12,7 +12,7 @@ const GradBorderWrapper = styled.div`
     padding: 2px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -56,32 +56,32 @@ const Wrapper = styled.div`
     }
 `;
 
-const PLACEHOLDER_TEXT = 'Search for transactions, addresses, blocks, embedded text data....';
+const PLACEHOLDER_TEXT = 'Search for transactions or address'; //'Search for transactions, addresses, blocks, embedded text data....';
 
-const useSearchBarHook = () => {
-    const history = useHistory();
-    const [searchTerm, setSearchTerm] = useState('');
+// const useSearchBarHook = () => {
+//     const history = useHistory();
+//     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleInputKeyPress = (event: any) => {
-        if (event.which === 13) {
-            submitSearch();
-        }
-    };
+//     const handleInputKeyPress = (event: any) => {
+//         if (event.which === 13) {
+//             submitSearch();
+//         }
+//     };
 
-    const submitSearch = () => {
-        if (!searchTerm) return;
+//     const submitSearch = () => {
+//         if (!searchTerm) return;
 
-        const searchUrlWithTerm = getSearchUrlWithTerm(searchTerm);
-        history.push(searchUrlWithTerm);
-    };
+//         const searchUrlWithTerm = getSearchUrlWithTerm(searchTerm);
+//         history.push(searchUrlWithTerm);
+//     };
 
-    return {
-        searchTerm,
-        setSearchTerm,
-        submitSearch,
-        handleInputKeyPress,
-    };
-};
+//     return {
+//         searchTerm,
+//         setSearchTerm,
+//         submitSearch,
+//         handleInputKeyPress,
+//     };
+// };
 
 export interface PresenterProps {
     setSearchTerm?: (t: any) => null;
@@ -89,10 +89,18 @@ export interface PresenterProps {
     handleInputKeyPress?: (t: any) => null;
 }
 
-const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInputKeyPress }: PresenterProps) => {
+const SearchBarPresenter = (/*{ setSearchTerm = (t) => t, submitSearch, handleInputKeyPress }: PresenterProps*/) => {
+    const history = useHistory();
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
+    const submitSearch = () => {
+        const searchUrlWithTerm = getSearchUrlWithTerm(searchTerm);
+        history.push(searchUrlWithTerm);
+    };
+
     return (
         <GradBorderWrapper>
-            <Wrapper>
+            <Wrapper onSubmit={submitSearch}>
                 <button className="btn-menu">
                     <svg width="30" height="19" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -107,7 +115,7 @@ const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInpu
                     placeholder={PLACEHOLDER_TEXT}
                     onChange={({ target }) => setSearchTerm(target.value)}
                     autoComplete="false"
-                    onKeyPress={handleInputKeyPress}
+                    // onKeyPress={handleInputKeyPress}
                 />
 
                 <div>
@@ -134,8 +142,8 @@ const SearchBarPresenter = ({ setSearchTerm = (t) => t, submitSearch, handleInpu
     );
 };
 
-const SearchBarContainer = composeHooks(() => ({
-    useSearchBar: () => useSearchBarHook(),
-}))(SearchBarPresenter) as (props: any) => JSX.Element;
+// const SearchBarContainer = composeHooks(() => ({
+//     useSearchBar: () => useSearchBarHook(),
+// }))(SearchBarPresenter) as (props: any) => JSX.Element;
 
-export default SearchBarContainer;
+export default SearchBarPresenter;
