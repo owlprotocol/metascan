@@ -11,6 +11,6 @@ export const CONTRACT_DETAILS = [
     // { href: 'internaltx', label: 'Internal Txns' },
     // { href: 'tokentxns', label: 'Erc20 Token Txns' },
     { href: 'code', label: 'Contract' },
-    // { href: 'events', label: 'Events' },
+    { href: 'events', label: 'Events' },
     // { href: 'comments', label: 'Comments' },
 ];

@@ -13,14 +13,14 @@ export interface EventSignature {
 
 //assumes address is of a valid contract
 function useFetchEvents(accountAddr: string) {
-    const [events, setEvents] = useState<(Log & { eventSig: EventSignature })[]>();
+    const [events, setEvents] = useState<(Log & { eventSig: EventSignature } & { methodId: string })[]>();
 
     useEffect(() => {
         (async () => {
             try {
                 const web3 = new Web3(web3URL);
                 const pastLogs = await web3.eth.getPastLogs({
-                    fromBlock: 13914500,
+                    fromBlock: 13959500,
                     address: accountAddr,
                 });
                 setEvents(
@@ -34,7 +34,10 @@ function useFetchEvents(accountAddr: string) {
                             const args: string[] = eventSig
                                 ?.substring(eventSig.indexOf('(') + 1, eventSig.indexOf(')'))
                                 .split(',');
-                            return { ...e, eventSig: { funcName, args } };
+
+                            const transaction = await web3.eth.getTransaction(e.transactionHash);
+                            const methodId = transaction.input;
+                            return { ...e, eventSig: { funcName, args }, methodId };
                         }),
                     ),
                 );
