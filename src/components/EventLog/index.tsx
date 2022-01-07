@@ -73,7 +73,7 @@ const BlockItemHeadContainer = styled.div`
 const HEADER_LABELS = ['txn hash', 'method', 'logs'];
 
 const EventLog = ({ accountAddr }: any) => {
-    const tableData = (item: Log & { eventSig: EventSignature }, label: string) => {
+    const tableData = (item: Log & { eventSig: EventSignature } & { methodId: string }, label: string) => {
         // @ts-ignore
         let data = item[label];
         switch (label) {
@@ -81,7 +81,7 @@ const EventLog = ({ accountAddr }: any) => {
                 data = shortenHash(item['transactionHash']);
                 break;
             case 'method':
-                data = 'method';
+                data = item.methodId.substring(0, 10);
                 break;
             case 'logs':
                 data = item['eventSig'];
@@ -104,9 +104,10 @@ const EventLog = ({ accountAddr }: any) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {eventLogs?.map((item: Log & { eventSig: EventSignature }) => {
+                    {eventLogs?.map((item: Log & { eventSig: EventSignature } & { methodId: string }) => {
                         return (
-                            <tr key={item.transactionHash}>
+                            //@ts-ignore
+                            <tr key={item.id}>
                                 {HEADER_LABELS.map((label) => (
                                     <th scope="row" key={label}>
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
@@ -116,6 +117,7 @@ const EventLog = ({ accountAddr }: any) => {
                                                         {tableData(item, label)}
                                                     </Link>
                                                 ),
+
                                                 logs: (
                                                     <div>
                                                         {(() => {

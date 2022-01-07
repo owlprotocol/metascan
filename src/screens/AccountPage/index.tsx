@@ -9,7 +9,7 @@ import {
     // TokenTxnsTable,
     TokenDropDown,
     ContractCode,
-    // EventLog,
+    EventLog,
 } from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import web3 from 'web3';
@@ -399,7 +399,7 @@ const AccountPage = (/*{ firstBalanceChange = '1', lastBalanceChange = '1' }*/) 
                             // '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
                             // '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
                             // '#code': <ContractCode bytecode={contract?.bytecode} />,
-                            // '#events': <EventLog accountAddr={accountAddr}></EventLog>,
+                            '#events': <EventLog accountAddr={accountAddr}></EventLog>,
                             // '#comments': <div>comments</div>,
                         }[location.hash] || (
                             /*<TransactionsTable data={tableData} internal={false}/>*/ <ContractCode
