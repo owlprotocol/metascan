@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'reactstrap';
-import { SearchBar, AddressBar, CopyToClipboard /*, TokenPriceCard*/ } from '../../components';
-// import { NAV_LINKS } from '../../constants';
-import { MetascanCardWrapper /*, NavigationWrapper */ } from '../../styles/Common';
+import { SearchBar, AddressBar, CopyToClipboard, TokenPriceCard } from '../../components';
+import { NAV_LINKS } from '../../constants';
+import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
 import { ReactComponent as QuestionMarkIcon } from '../../icons/questionMark.svg';
 import { useNetworkCreate, useFetchTransactionData, useEthPrice } from '../../hooks';
 import composeHooks from 'react-hooks-compose';
@@ -108,9 +108,9 @@ const DetailsTitle = styled.div`
     color: rgba(112, 121, 123, 0.7);
 `;
 
-// const Navigation = styled(NavigationWrapper)`
-//     margin-bottom: 0;
-// `;
+const Navigation = styled(NavigationWrapper)`
+    margin-bottom: 0;
+`;
 
 const TxnDataWrapper = styled.div`
     padding: 12px 22px 5vw;
@@ -164,18 +164,18 @@ const TxnDataWrapper = styled.div`
     }
 `;
 
-// const SeeMoreButton = styled.div`
-//     display: flex;
-//     align-items: center;
-//     color: #5092c5;
-//     font-weight: 500;
-//     font-size: 20px;
-//     line-height: 25px;
+const SeeMoreButton = styled.div`
+    display: flex;
+    align-items: center;
+    color: #5092c5;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 25px;
 
-//     svg {
-//         margin-left: 12px;
-//     }
-// `;
+    svg {
+        margin-left: 12px;
+    }
+`;
 
 const TxnStatusWrapper = styled.div`
     background: #cde7ec;
@@ -338,7 +338,7 @@ const TransactionPagePresenter = ({
                                 </TxnStatusWrapper>
 
                                 <div className="flex">
-                                    {/* <div>
+                                    <div>
                                         <svg
                                             width="6"
                                             height="14"
@@ -369,7 +369,7 @@ const TransactionPagePresenter = ({
                                         </svg>
 
                                         <a href="/receipt">Transaction receipt</a>
-                                    </div> */}
+                                    </div>
                                 </div>
 
                                 <div>
@@ -378,17 +378,17 @@ const TransactionPagePresenter = ({
                                 </div>
                             </CurrencyDetailsCard>
                         </Col>
-                        {/* <Col xs="12" md="3">
+                        <Col xs="12" md="3">
                             <AccountDetailsCard>
                                 <TokenPriceCard />
                             </AccountDetailsCard>
-                        </Col> */}
+                        </Col>
                     </Row>
                 </Container>
             </HeroWrapper>
 
             <Container>
-                {/* <Navigation>
+                <Navigation>
                     {NAV_LINKS.map((link, key) => (
                         <NavLink to={link.href} key={key}>
                             {link.label}
@@ -406,7 +406,7 @@ const TransactionPagePresenter = ({
                             />
                         </svg>
                     </button>
-                </Navigation> */}
+                </Navigation>
 
                 <TxnDataWrapper>
                     <div>
@@ -416,9 +416,7 @@ const TransactionPagePresenter = ({
                                 Block
                             </span>
                             <span>
-                                {/* <NavLink to={`/block/${blockNumber}`}> */}
-                                {blockNumber}
-                                {/* </NavLink> */}
+                                <NavLink to={`/block/${blockNumber}`}>{blockNumber}</NavLink>
                             </span>
                         </div>
                     </div>
@@ -430,7 +428,7 @@ const TransactionPagePresenter = ({
                             </span>
                             <span>{Web3.utils.fromWei(Web3.utils.hexToNumberString(gasPrice))} Ether</span>
                         </div>
-                        {/* <div>
+                        <div>
                             <span className="title">
                                 <QuestionMarkIcon />
                                 Timestamp
@@ -439,7 +437,7 @@ const TransactionPagePresenter = ({
                                 10 days 14 hrs ago (Nov 29 2021 02:24:15 PM +UTC)
                                 <span className="sm-text"> | Confirmed within 1 minute</span>
                             </span>
-                        </div> */}
+                        </div>
                     </div>
                     <div>
                         <div>
@@ -455,11 +453,10 @@ const TransactionPagePresenter = ({
                         <div>
                             <span className="title">
                                 <QuestionMarkIcon />
-                                To
-                                {/* Interacted with */}
+                                To Interacted with
                             </span>
                             <span>
-                                {/* Contract &nbsp; */}
+                                Contract &nbsp;
                                 <NavLink to={`/address/${to}`}>{to}</NavLink>
                                 <CopyToClipboard text={to} />
                             </span>
@@ -485,7 +482,7 @@ const TransactionPagePresenter = ({
                             </span>
                         </div>
                     </div>
-                    {/* <div>
+                    <div>
                         <div>
                             <span className="title">
                                 <QuestionMarkIcon />
@@ -525,7 +522,7 @@ const TransactionPagePresenter = ({
                                 <a href="#">To access the Private note feature, you must be Logged In</a>
                             </span>
                         </div>
-                    </div> */}
+                    </div>
                 </TxnDataWrapper>
             </Container>
         </Wrapper>
