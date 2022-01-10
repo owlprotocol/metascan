@@ -3,9 +3,9 @@
  * @param searchTerm search term can be Block number / Block hash / Transaction / Address.
  */
 export const getSearchUrlWithTerm = (searchTerm: string) => {
-    // if (validateBlockNumber(searchTerm)) {
-    //     return `/block/${searchTerm}/`;
-    /* } else*/ if (validateTransactionHash(searchTerm)) {
+    if (validateBlockNumber(searchTerm)) {
+        return `/block/${searchTerm}/`;
+    } else if (validateTransactionHash(searchTerm)) {
         return `/txn/${searchTerm}`;
     } else if (validateAddress(searchTerm)) {
         return `/address/${searchTerm}/`;
