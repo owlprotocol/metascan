@@ -12,7 +12,7 @@ import {
     EventLog,
 } from '../../components';
 import { MetascanCardWrapper, NavigationWrapper } from '../../styles/Common';
-import web3 from 'web3';
+import { fromWei } from 'web3-utils';
 import { Account } from '@leovigna/web3-redux';
 import { useNetworkCreate, useAccount, useEthPrice } from '../../hooks';
 import { ERC721, Contract } from '../../hooks/useAccount';
@@ -204,7 +204,7 @@ interface optionTab {
 }
 
 interface IAccount {
-    account: Account.Interface;
+    account: Account.Account;
     contract?: Contract;
     ERC721?: ERC721;
     optionTabs: optionTab[];
@@ -314,15 +314,13 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                                     </div>
                                     <div className="flex">
                                         <span>Balance</span>
-                                        <span>{account?.balance ? web3.utils.fromWei(account.balance) : '0'} ETH</span>
+                                        <span>{account?.balance ? fromWei(account.balance) : '0'} ETH</span>
                                     </div>
                                     <div className="flex">
                                         <span>Ether Value</span>
                                         <span>
                                             {account?.balance
-                                                ? (parseFloat(web3.utils.fromWei(account.balance)) * ethPrice).toFixed(
-                                                      2,
-                                                  )
+                                                ? (parseFloat(fromWei(account.balance)) * ethPrice).toFixed(2)
                                                 : '0'}{' '}
                                             USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
                                         </span>

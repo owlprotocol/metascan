@@ -190,9 +190,14 @@ function useFetchAccountTokens(networkId: string, accountAddr: string) {
             symbol: contr.symbol,
             address: contr.address,
             abi: contr.abi,
-            currAccBal: Contract.selectContractCall(store.getState(), `${networkId}-${contr.address}`, 'balanceOf', {
-                args: [accountAddr],
-            }),
+            currAccBal: Contract.selectContractCall(
+                store.getState(),
+                { networkId, address: contr.address },
+                'balanceOf',
+                {
+                    args: [accountAddr],
+                },
+            ),
         };
     });
 

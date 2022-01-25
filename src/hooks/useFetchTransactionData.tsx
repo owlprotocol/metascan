@@ -14,7 +14,9 @@ function useFetchTransactionData(txnHash: string) {
         dispatch(Transaction.fetch({ networkId: currentNetworkId, hash: txnHash }));
     }, [currentNetworkId, txnHash, dispatch]);
 
-    const txnData = useSelector((state) => Transaction.selectById(state, `${currentNetworkId}-${txnHash}`));
+    const txnData = useSelector((state) =>
+        Transaction.selectByIdSingle(state, { networkId: currentNetworkId, hash: txnHash }),
+    );
     return txnData;
 }
 

@@ -24,7 +24,7 @@ const ERC721ENUMERABLE_INTERFACE_ID = '0x780e9d63';
 const selectCurrAddr = (networkId: string, addr: string) =>
     createSelector(
         (state: any) => state.web3Redux.Account.itemsById,
-        (items: Account.Interface[]) => {
+        (items: Account.Account[]) => {
             if (!items) return {};
             for (const item in items) {
                 if (item === `${networkId}-${addr}`) return items[item];
@@ -61,9 +61,9 @@ function useAccount(networkId: string, accountAddr: string) {
     const [contract, setContract] = useState<Contract>({ isContract: false });
     const [ERC721, setERC721] = useState<ERC721>({ isERC721: false });
     const [optionTabs, setOptionTabs] = useState<{ href: string; label: string }[]>(EOA_DETAILS);
-    const account: Account.Interface = useSelector<Account.Interface>(
+    const account: Account.Account = useSelector<Account.Account>(
         selectCurrAddr(networkId, accountAddr),
-    ) as Account.Interface;
+    ) as Account.Account;
     // const contract: Contract.Interface = useSelector<Contract.Interface>(
     //     selectCurrContr(networkId, accountAddr),
     // ) as Contract.Interface;
