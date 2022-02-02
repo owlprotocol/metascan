@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Web3 from 'web3';
-import { Network } from '@leovigna/web3-redux';
+import { Network } from '@owlprotocol/web3-redux';
 import { NETWORKS, ChainId } from '../constants/network';
 
 // Hook for creating web3 network connection

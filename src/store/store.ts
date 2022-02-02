@@ -1,4 +1,4 @@
-import { rootReducer as web3ReduxReducer, rootSaga as web3ReduxSaga } from '@leovigna/web3-redux';
+import { rootReducer as web3ReduxReducer, rootSaga as web3ReduxSaga } from '@owlprotocol/web3-redux';
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import appReducer from './reducers/appReducer';

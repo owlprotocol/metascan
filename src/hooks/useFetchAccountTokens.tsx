@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AbiItem, AbiType, StateMutabilityType } from 'web3-utils';
-import { Contract } from '@leovigna/web3-redux';
+import { Contract } from '@owlprotocol/web3-redux';
 import store from '../store/store';
 
 const WETH_CONTR_ADDR = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';

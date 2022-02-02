@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Account } from '@leovigna/web3-redux';
+import { Contract } from '@owlprotocol/web3-redux';
 import { EOA_DETAILS, CONTRACT_DETAILS } from '../constants';
 import { NETWORKS, ChainId } from '../constants/network';
 import Web3 from 'web3';
@@ -24,7 +24,7 @@ const ERC721ENUMERABLE_INTERFACE_ID = '0x780e9d63';
 const selectCurrAddr = (networkId: string, addr: string) =>
     createSelector(
         (state: any) => state.web3Redux.Account.itemsById,
-        (items: Account.Account[]) => {
+        (items: Contract.Contract[]) => {
             if (!items) return {};
             for (const item in items) {
                 if (item === `${networkId}-${addr}`) return items[item];
@@ -61,9 +61,9 @@ function useAccount(networkId: string, accountAddr: string) {
     const [contract, setContract] = useState<Contract>({ isContract: false });
     const [ERC721, setERC721] = useState<ERC721>({ isERC721: false });
     const [optionTabs, setOptionTabs] = useState<{ href: string; label: string }[]>(EOA_DETAILS);
-    const account: Account.Account = useSelector<Account.Account>(
+    const account: Contract.Contract = useSelector<Contract.Contract>(
         selectCurrAddr(networkId, accountAddr),
-    ) as Account.Account;
+    ) as Contract.Contract;
     // const contract: Contract.Interface = useSelector<Contract.Interface>(
     //     selectCurrContr(networkId, accountAddr),
     // ) as Contract.Interface;
@@ -93,9 +93,9 @@ function useAccount(networkId: string, accountAddr: string) {
             const hasEnumerable = await contr.methods.supportsInterface(ERC721ENUMERABLE_INTERFACE_ID).call();
             setERC721({ isERC721: isErc721, hasMetadata: hasMetadata, hasEnumerable: hasEnumerable });
         })();
-        dispatch(Account.create(item));
-        dispatch(Account.fetchBalance(item));
-        dispatch(Account.fetchNonce(item));
+        dispatch(Contract.create(item));
+        dispatch(Contract.getBalance(item));
+        dispatch(Contract.getNonce(item));
     }, [accountAddr, dispatch, networkId, validAddr]);
     return { account, contract, optionTabs, ERC721 };
 }

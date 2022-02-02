@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Transaction } from '@leovigna/web3-redux';
+import { Transaction } from '@owlprotocol/web3-redux';
 
 // Hook for fetching all data required to render Transaction page
 function useFetchTransactionData(txnHash: string) {
