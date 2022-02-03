@@ -1,6 +1,9 @@
 import { useTransaction } from '@owlprotocol/web3-redux/transaction/hooks';
 import composeHooks from 'react-hooks-compose';
 import { Link } from 'react-router-dom';
+import { toBN, fromWei } from 'web3-utils';
+import { shortenHash } from '../../utils';
+import { RowContainer } from './styles';
 
 export interface Props {
     networkId: string;
@@ -8,29 +11,64 @@ export interface Props {
 }
 export const useTransactionRow = ({ networkId, hash }: Props) => {
     const transaction = useTransaction(networkId, hash);
-    return { ...transaction };
+    const { blockNumber, from, to, value } = transaction ?? {};
+
+    //TODO
+    const method = hash.substring(0, 6);
+    const age = 'placeholder';
+
+    //TODO: gasUsed ?
+    const gas = transaction?.gas ? toBN(transaction.gas) : toBN(0);
+    const gasPrice = transaction?.gasPrice ? toBN(transaction.gasPrice) : toBN(0);
+    const fee = fromWei(gas.mul(gasPrice));
+    return { hash, method, blockNumber, from, to, value, age, fee };
 };
 
+//['hash', 'method', 'blockNumber', 'age', 'from', 'to', 'value', 'fee'];
 export interface PresenterProps {
     hash: string;
+    method: string;
     blockNumber: number;
+    age: string;
     from: string;
     to: string;
+    value: string;
+    fee: string;
 }
-export const TransactionRowPresenter = ({ hash, blockNumber, from, to }: PresenterProps) => {
+export const TransactionRowPresenter = ({ hash, method, blockNumber, age, from, to, value, fee }: PresenterProps) => {
     return (
         <tr key={hash}>
             <th scope="row" key="hash">
-                <Link to={`/txn/${hash}`}>{hash}</Link>
+                <RowContainer>
+                    <Link to={`/txn/${hash}`}>{shortenHash(hash)}</Link>
+                </RowContainer>
             </th>
-            <th scope="row" key="block">
-                <Link to={`/block/${blockNumber}`}>{blockNumber}</Link>
+            <th scope="row" key="method">
+                <RowContainer className="method">{method}</RowContainer>
+            </th>
+            <th scope="row" key="blockNumber">
+                <RowContainer>
+                    <Link to={`/block/${blockNumber}`}>{blockNumber}</Link>
+                </RowContainer>
+            </th>
+            <th scope="row" key="age">
+                <RowContainer>{age}</RowContainer>
             </th>
             <th scope="row" key="from">
-                <Link to={`/address/${from}`}>{from}</Link>
+                <RowContainer>
+                    <Link to={`/address/${from}`}>{from}</Link>
+                </RowContainer>
             </th>
             <th scope="row" key="to">
-                <Link to={`/address/${to}`}>{to}</Link>
+                <RowContainer>
+                    <Link to={`/address/${to}`}>{to}</Link>
+                </RowContainer>
+            </th>
+            <th scope="row" key="value">
+                <RowContainer>{value}</RowContainer>
+            </th>
+            <th scope="row" key="fee">
+                <RowContainer>{fee}</RowContainer>
             </th>
         </tr>
     );
