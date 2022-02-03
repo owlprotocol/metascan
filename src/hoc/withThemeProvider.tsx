@@ -2,7 +2,7 @@ import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from '../constants';
 import getDisplayName from './getDisplayName';
 
-const withThemeProvider = (WrappedComponent: any) => {
+export const withThemeProvider = (WrappedComponent: any) => {
     const component = (props: string) => (
         //@ts-ignore
         <ThemeProvider theme={THEME_COLORS[props.theme] ?? THEME_COLORS.light}>

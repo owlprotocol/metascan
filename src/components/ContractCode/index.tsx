@@ -1,21 +1,20 @@
-import styled from 'styled-components';
+import { useGetCode } from '@owlprotocol/web3-redux/contract/hooks';
+import composeHooks from 'react-hooks-compose';
+import { Title, Wrapper } from './styles';
 
-const Title = styled.div`
-    color: #70797b;
-    font-weight: 500;
-    font-size: 28px;
-`;
+export interface Props {
+    networkId: string;
+    address: string;
+}
+export const useContractCode = ({ networkId, address }: Props) => {
+    const bytecode = useGetCode(networkId, address);
+    return { bytecode };
+};
 
-const Wrapper = styled.div`
-    border: lightgrey 1px solid;
-    border-radius: 15px;
-    height: 200px;
-    padding: 5px 10px;
-    word-wrap: break-word;
-    overflow-y: scroll;
-`;
-
-const ContractCode = ({ bytecode }: any) => {
+export interface PresenterProps {
+    bytecode: string;
+}
+export const ContractCodePresenter = ({ bytecode }: PresenterProps) => {
     return (
         <>
             <Title>Bytecode</Title>
@@ -23,5 +22,9 @@ const ContractCode = ({ bytecode }: any) => {
         </>
     );
 };
+
+export const ContractCode = composeHooks((props: Props) => ({
+    useContractCode: () => useContractCode(props),
+}))(ContractCodePresenter) as (props: Props) => JSX.Element;
 
 export default ContractCode;

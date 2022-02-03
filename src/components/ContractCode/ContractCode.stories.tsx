@@ -1,20 +1,23 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { withThemeProvider } from '../../hoc';
-import ContractCode from '.';
+import Web3 from 'web3';
+import { Network } from '@owlprotocol/web3-redux';
+import { MAINNET_RPC } from '@owlprotocol/web3-redux/environment';
+import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
+import { ContractCode, Props } from '.';
 
-const Wrapper = withThemeProvider((props: any) => {
-    return <ContractCode {...props} />;
-});
+const network: Network.Network = { networkId: '1', web3: new Web3(MAINNET_RPC) };
+const actions = [Network.create(network)];
+
+const Wrapper = withThemeProvider(withStoreProvider(withMockData(ContractCode, actions)));
+const Template: ComponentStory<typeof ContractCode> = (args: any) => <Wrapper {...args} />;
+export const Main = Template.bind({});
+const Args: Props = {
+    networkId: '1',
+    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+};
+Main.args = Args;
 
 export default {
-    title: 'Generic/ContractCode',
+    title: 'Contract/ContractCode',
     component: ContractCode,
 } as ComponentMeta<typeof ContractCode>;
-
-const Template: ComponentStory<typeof ContractCode> = (args: any) => <Wrapper {...args} />;
-
-export const Main = Template.bind({});
-
-Main.args = {
-    bytecode: '0xff01024812309098a6ef98a6f896b89fea69bf6ae0bf89',
-};
