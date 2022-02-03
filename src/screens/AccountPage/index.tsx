@@ -1,35 +1,15 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ComponentType, /*useEffect,*/ useRef } from 'react';
 import { useParams, NavLink, HashRouter, useLocation, withRouter, RouteComponentProps } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
-import {
-    SearchBar,
-    AddressBar,
-    TransactionsTable,
-    TokenTxnsTable,
-    TokenDropDown,
-    ContractCode,
-    EventLog,
-} from '../../components';
-import { fromWei } from 'web3-utils';
-//import { Contract } from '@owlprotocol/web3-redux';
-import { useNetworkCreate, /*useAccount,*/ useEthPrice } from '../../hooks';
-import { DetailButton, ETH, Metascan } from '../../svg';
-//import { ERC721 } from '../../hooks/useAccount';
-import { internalTableData, ERC20Data, ERC721Data, tableData } from './stub';
-import {
-    Wrapper,
-    HeroWrapper,
-    SearchBarWrapper,
-    Headline,
-    AccountDetailsCard,
-    CurrencyDetailsCard,
-    Navigation,
-    StatementText,
-    TableWrapper,
-} from './styles';
+import { Container } from 'reactstrap';
+import composeHooks from 'react-hooks-compose';
 
-const NETWORK_ID = '1';
+import { SearchBar, TransactionsTable, TokenTxnsTable, ContractCode, EventLog } from '../../components';
+import { useNetworkCreate, /*useAccount,*/ useEthPrice } from '../../hooks';
+import { DetailButton } from '../../svg';
+import { Wrapper, HeroWrapper, SearchBarWrapper, Navigation, TableWrapper } from './styles';
+import { AccountInfoRow } from './AccountInfoRow';
+
 /*
 interface optionTab {
     href: string;
@@ -46,19 +26,36 @@ interface IAccount {
 }
 */
 
-const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
+export interface Props {
+    networkId?: string;
+    address: string;
+}
+export const useAccountPage = () => {
+    const ethPrice = useEthPrice();
+    const { networkId, address } = useParams<{ networkId: string; address: string }>();
+    const { hash } = useLocation();
+
+    return { ethPrice, networkId: networkId ?? '1', address, locationHash: hash };
+};
+
+export interface PresenterProps {
+    networkId: string;
+    address: string;
+    locationHash: string;
+    txHashList: string[];
+}
+export const AccountPagePresenter = ({ networkId, address, txHashList }: PresenterProps) => {
     //routing
     const refs = useRef<HTMLAnchorElement[]>([]);
     const defRef = useRef<HTMLAnchorElement>(null);
     const location = useLocation();
 
     //Web3 data fetching
-    useNetworkCreate();
-    const { accountAddr } = useParams<{ accountAddr: string }>();
+
     //const accountObj: IAccount | undefined = useAccount(NETWORK_ID, accountAddr as string);
     //const { account, contract, optionTabs } = accountObj;
     //Coinbase Api
-    const ethPrice: number = useEthPrice();
+    //const ethPrice: number = useEthPrice();
 
     // selection handling
     /*
@@ -83,79 +80,15 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
     });
     */
 
-    const account = {};
-
     return (
         <Wrapper>
             <HeroWrapper>
                 <SearchBarWrapper>
                     <SearchBar />
                 </SearchBarWrapper>
-
                 <Container>
-                    <Row>
-                        <Headline>
-                            <ETH />
-                            Ethereum Account
-                        </Headline>
-                    </Row>
-                    {account ? (
-                        <Row>
-                            <Col xs="12" md="3">
-                                <AccountDetailsCard>
-                                    <div>First balance change</div>
-                                    <div>Received {firstBalanceChange} ago</div>
-                                    <div>Last balance change</div>
-                                    <div>Sent {lastBalanceChange} ago</div>
-                                    <div>Transaction count</div>
-                                    <div>{account?.nonce ? account.nonce : '0'}</div>
-                                </AccountDetailsCard>
-                            </Col>
-                            <Col xs="12" md="6">
-                                <CurrencyDetailsCard>
-                                    <AddressBar
-                                        address={accountAddr}
-                                        title={contract?.isContract === true ? 'Contract' : 'Address'}
-                                        hasQR
-                                    />
-                                    <div>
-                                        <Metascan />
-                                        <a href="/">View address on other chains</a>
-                                    </div>
-                                    <div className="flex">
-                                        <span>Balance</span>
-                                        <span>{account?.balance ? fromWei(account.balance) : '0'} ETH</span>
-                                    </div>
-                                    <div className="flex">
-                                        <span>Ether Value</span>
-                                        <span>
-                                            {account?.balance
-                                                ? (parseFloat(fromWei(account.balance)) * ethPrice).toFixed(2)
-                                                : '0'}{' '}
-                                            USD {`(${Math.round(ethPrice * 100) / 100}/ETH)`}
-                                        </span>
-                                    </div>
-                                    <TokenDropDown accountAddr={accountAddr as string} networkId={NETWORK_ID} />
-                                </CurrencyDetailsCard>
-                            </Col>
-                            <Col xs="12" md="3">
-                                <AccountDetailsCard>
-                                    <div>More Info</div>
-                                    <div>
-                                        My name tag
-                                        <a href="/login">Login</a>
-                                    </div>
-                                </AccountDetailsCard>
-                            </Col>
-                        </Row>
-                    ) : (
-                        <div>Invalid Ethereum Address</div>
-                    )}
-                </Container>
-            </HeroWrapper>
-
-            {account && optionTabs?.length !== 0 && (
-                <Container>
+                    <AccountInfoRow networkId={networkId} address={address} />
+                    {/*
                     <Navigation>
                         <NavLink ref={defRef} exact to={location.pathname}>
                             {optionTabs[0].label}
@@ -182,27 +115,30 @@ const AccountPage = ({ firstBalanceChange = '1', lastBalanceChange = '1' }) => {
                         </button>
                     </Navigation>
 
-                    <StatementText>
-                        Latest 25 from a total of <span>3,688</span> transactions
-                    </StatementText>
+                    */}
 
+                    {/*
+                        <StatementText>
+                            Latest 25 from a total of <span>3,688</span> transactions
+                        </StatementText>
+    */}
                     <TableWrapper>
-                        {{
-                            '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
-                            '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
-                            '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
-                            '#code': <ContractCode bytecode={contract?.bytecode} />,
-                            '#events': <EventLog accountAddr={accountAddr}></EventLog>,
-                            '#comments': <div>comments</div>,
-                        }[location.hash] || <TransactionsTable data={tableData} internal={false} />}
+                        {/*{
+                                '#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
+                                '#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
+                                '#tokentxnsErc721': <TokenTxnsTable data={ERC721Data} ERC721={true} />,
+                                '#code': <ContractCode bytecode={contract?.bytecode} />,
+                                '#events': <EventLog accountAddr={accountAddr}></EventLog>,
+                                '#comments': <div>comments</div>,
+                            }[location.hash] */}
+
+                        <TransactionsTable networkId={networkId} hashList={txHashList ?? []} />
                     </TableWrapper>
                 </Container>
-            )}
+            </HeroWrapper>
         </Wrapper>
     );
 };
-
-export default withRouter(AccountPage as ComponentType<RouteComponentProps>);
 
 /*
 const select = (ref: HTMLAnchorElement) => {
@@ -215,3 +151,9 @@ const deselect = (ref: HTMLAnchorElement) => {
     ref.style.color = '#70797b';
 };
 */
+
+export const AccountPage = composeHooks(() => ({
+    useAccountPage: () => useAccountPage(),
+}))(AccountPagePresenter) as () => JSX.Element;
+
+export default AccountPage;
