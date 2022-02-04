@@ -1,8 +1,9 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { ADDRESS_0 } from '@owlprotocol/web3-redux/test/data';
 import Web3 from 'web3';
 import { Network } from '@owlprotocol/web3-redux';
 import { MAINNET_RPC } from '@owlprotocol/web3-redux/environment';
+import { networkIdArgType, addressArgType } from '../../test/storybookArgs';
+
 import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
 import { AccountInfoRow, AccountInfoRowProps } from './AccountInfoRow';
 
@@ -13,10 +14,14 @@ const Wrapper = withThemeProvider(withStoreProvider(withMockData(AccountInfoRow,
 const Template: ComponentStory<typeof AccountInfoRow> = (args: any) => <Wrapper {...args} />;
 export const Main = Template.bind({});
 const Args: AccountInfoRowProps = {
-    networkId: '1',
-    address: ADDRESS_0,
+    networkId: networkIdArgType.options[0],
+    address: addressArgType.options[0],
 };
 Main.args = Args;
+Main.argTypes = {
+    networkId: networkIdArgType,
+    address: addressArgType,
+};
 
 export default {
     title: 'Account/AccountInfoRow',

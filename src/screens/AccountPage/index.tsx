@@ -1,30 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { /*useEffect,*/ useRef } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import composeHooks from 'react-hooks-compose';
 
-import { SearchBar, TransactionsTable } from '../../components';
-import { /*useAccount,*/ useEthPrice } from '../../hooks';
-import { Wrapper, HeroWrapper, SearchBarWrapper, TableWrapper } from './styles';
+import { SearchBar } from '../../components';
+import { useEthPrice } from '../../hooks';
+import { Wrapper, HeroWrapper, SearchBarWrapper } from './styles';
 import { AccountInfoRow } from './AccountInfoRow';
 import { AccountDataTable } from './AccountDataTable';
-
-/*
-interface optionTab {
-    href: string;
-    label: string;
-}
-*/
-
-/*
-interface IAccount {
-    account: Contract.Contract;
-    contract?: Contract.Contract;
-    ERC721?: ERC721;
-    optionTabs: optionTab[];
-}
-*/
 
 export interface Props {
     networkId?: string;
@@ -33,18 +15,15 @@ export interface Props {
 export const useAccountPage = () => {
     const ethPrice = useEthPrice();
     const { networkId, address } = useParams<{ networkId: string; address: string }>();
-    const { hash } = useLocation();
-
-    return { ethPrice, networkId: networkId ?? '1', address, locationHash: hash ?? '#transactions' };
+    return { ethPrice, networkId: networkId ?? '1', address };
 };
 
 export interface PresenterProps {
     networkId: string;
     address: string;
-    locationHash: string;
     txHashList: string[];
 }
-export const AccountPagePresenter = ({ networkId, address, txHashList, locationHash }: PresenterProps) => {
+export const AccountPagePresenter = ({ networkId, address, txHashList }: PresenterProps) => {
     return (
         <Wrapper>
             <HeroWrapper>
@@ -53,12 +32,7 @@ export const AccountPagePresenter = ({ networkId, address, txHashList, locationH
                 </SearchBarWrapper>
                 <Container>
                     <AccountInfoRow networkId={networkId} address={address} />
-                    <AccountDataTable
-                        networkId={networkId}
-                        address={address}
-                        txHashList={txHashList}
-                        table={locationHash}
-                    />
+                    <AccountDataTable networkId={networkId} address={address} txHashList={txHashList} />
                 </Container>
             </HeroWrapper>
         </Wrapper>

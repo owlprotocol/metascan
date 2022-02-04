@@ -1,16 +1,21 @@
 import { Table as ReactstrapTable } from 'reactstrap';
+import { map } from 'lodash';
+import { useFetchTransactions } from '@owlprotocol/web3-redux/contract/hooks';
 import TransactionRow from '../TransactionRow';
 import { Wrapper } from './styles';
 
 export interface Props {
     networkId: string;
-    hashList: string[];
+    address: string;
 }
 
 //const HEADER_LABELS = ['txn hash', 'method', 'block', 'age', 'from', 'to', 'value', 'txn fee'];
 //const INTERNAL_HEADER_LABELS = ['parent txn hash', 'block', 'age', 'from', 'to', 'value'];
 
-export const TransactionsTable = ({ networkId, hashList }: Props) => {
+export const TransactionsTable = ({ networkId, address }: Props) => {
+    const transactions = useFetchTransactions(networkId, address);
+    const hashList = map(transactions, 'hash');
+
     return (
         <Wrapper>
             <ReactstrapTable responsive>

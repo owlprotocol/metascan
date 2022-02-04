@@ -6,14 +6,13 @@ import { Navigation, TableWrapper } from './styles';
 export interface AccountDataTableProps {
     networkId: string;
     address: string;
-    txHashList: string[];
 }
 
 const isActiveStyle = {
     backgroundColor: '#2090f960',
     color: 'black',
 };
-export const AccountDataTable = ({ networkId, address, txHashList }: AccountDataTableProps) => {
+export const AccountDataTable = ({ networkId, address }: AccountDataTableProps) => {
     const { hash } = useLocation();
     return (
         <>
@@ -38,7 +37,7 @@ export const AccountDataTable = ({ networkId, address, txHashList }: AccountData
             <TableWrapper>
                 {
                     {
-                        '#transactions': <TransactionsTable networkId={networkId} hashList={txHashList ?? []} />,
+                        '#transactions': <TransactionsTable networkId={networkId} address={address} />,
                         '#code': <ContractCode networkId={networkId} address={address} />,
                         //'#internaltx': <TransactionsTable data={internalTableData} internal={true} />,
                         //'#tokentxns': <TokenTxnsTable data={ERC20Data} ERC721={false} />,
