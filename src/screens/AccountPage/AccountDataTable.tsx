@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ContractCode, TransactionsTable } from '../../components';
 //import { DetailButton } from '../../svg';
 import { Navigation, TableWrapper } from './styles';
@@ -6,21 +6,25 @@ import { Navigation, TableWrapper } from './styles';
 export interface AccountDataTableProps {
     networkId: string;
     address: string;
+    locationHash: '#transactions' | '#code';
 }
 
 const isActiveStyle = {
     backgroundColor: '#2090f960',
     color: 'black',
 };
-export const AccountDataTable = ({ networkId, address }: AccountDataTableProps) => {
-    const { hash } = useLocation();
+export const AccountDataTable = ({ networkId, address, locationHash }: AccountDataTableProps) => {
     return (
         <>
             <Navigation>
-                <NavLink isActive={() => hash === '#transactions'} to="#transactions" activeStyle={isActiveStyle}>
+                <NavLink
+                    isActive={() => locationHash === '#transactions'}
+                    to="#transactions"
+                    activeStyle={isActiveStyle}
+                >
                     transactions
                 </NavLink>
-                <NavLink isActive={() => hash === '#code'} to="#code" activeStyle={isActiveStyle}>
+                <NavLink isActive={() => locationHash === '#code'} to="#code" activeStyle={isActiveStyle}>
                     code
                 </NavLink>
                 {/*
@@ -45,21 +49,9 @@ export const AccountDataTable = ({ networkId, address }: AccountDataTableProps) 
                         //'#code': <ContractCode bytecode={contract?.bytecode} />,
                         //'#events': <EventLog accountAddr={accountAddr}></EventLog>,
                         //'#comments': <div>comments</div>,
-                    }[hash]
+                    }[locationHash]
                 }
             </TableWrapper>
         </>
     );
 };
-
-/*
-const select = (ref: HTMLAnchorElement) => {
-    ref.style.backgroundColor = '#2090f960';
-    ref.style.color = 'black';
-};
-
-const deselect = (ref: HTMLAnchorElement) => {
-    ref.style.backgroundColor = 'white';
-    ref.style.color = '#70797b';
-};
-*/

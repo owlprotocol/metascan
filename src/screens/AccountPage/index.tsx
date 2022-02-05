@@ -1,6 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import composeHooks from 'react-hooks-compose';
+import { useGetNonce, useGetBalance } from '@owlprotocol/web3-redux/contract/hooks';
 
 import { SearchBar } from '../../components';
 import { useEthPrice } from '../../hooks';
@@ -9,21 +10,35 @@ import { AccountInfoRow } from './AccountInfoRow';
 import { AccountDataTable } from './AccountDataTable';
 
 export interface Props {
-    networkId?: string;
+    networkId: string;
     address: string;
 }
-export const useAccountPage = () => {
+export const useAccountPage = ({ networkId, address }: Props): PresenterProps => {
     const ethPrice = useEthPrice();
-    const { networkId, address } = useParams<{ networkId: string; address: string }>();
-    return { ethPrice, networkId: networkId ?? '1', address };
+    const nonce = useGetNonce(networkId, address);
+    const balance = useGetBalance(networkId, address);
+    const { hash } = useLocation();
+
+    return { networkId, address, nonce, balance, ethPrice, locationHash: (hash as any) ?? '#transactions' };
 };
 
 export interface PresenterProps {
     networkId: string;
     address: string;
-    txHashList: string[];
+    nonce?: number;
+    balance?: string;
+    ethPrice?: number;
+    isContract?: boolean;
+    locationHash?: '#transactions' | '#code';
 }
-export const AccountPagePresenter = ({ networkId, address, txHashList }: PresenterProps) => {
+export const AccountPagePresenter = ({
+    networkId,
+    address,
+    nonce = 0,
+    balance = '0',
+    ethPrice = 0,
+    locationHash = '#transactions',
+}: PresenterProps) => {
     return (
         <Wrapper>
             <HeroWrapper>
@@ -31,16 +46,22 @@ export const AccountPagePresenter = ({ networkId, address, txHashList }: Present
                     <SearchBar />
                 </SearchBarWrapper>
                 <Container>
-                    <AccountInfoRow networkId={networkId} address={address} />
-                    <AccountDataTable networkId={networkId} address={address} txHashList={txHashList} />
+                    <AccountInfoRow
+                        networkId={networkId}
+                        address={address}
+                        nonce={nonce}
+                        balance={balance}
+                        ethPrice={ethPrice}
+                    />
+                    <AccountDataTable networkId={networkId} address={address} locationHash={locationHash} />
                 </Container>
             </HeroWrapper>
         </Wrapper>
     );
 };
 
-export const AccountPage = composeHooks(() => ({
-    useAccountPage: () => useAccountPage(),
+export const AccountPage = composeHooks((props: Props) => ({
+    useAccountPage: () => useAccountPage(props),
 }))(AccountPagePresenter) as () => JSX.Element;
 
 export default AccountPage;

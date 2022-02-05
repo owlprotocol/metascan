@@ -1,8 +1,7 @@
 import { Row, Col } from 'reactstrap';
-import { fromWei, isAddress } from 'web3-utils';
-import { Metascan } from '../../svg';
+import { fromWei, isAddress, toBN } from 'web3-utils';
 import { AddressBar, TokenDropDown } from '../../components';
-import { AccountDetailsCard, CurrencyDetailsCard } from './styles';
+import { CurrencyDetailsCard } from './styles';
 
 export interface AccountInfoRowProps {
     networkId: string;
@@ -24,44 +23,57 @@ export const AccountInfoRow = ({
     ethPrice = 0,
     isContract = false,
 }: AccountInfoRowProps) => {
+    //Customize per chain
+    //const networkName = 'Ethereum';
+    const networkCurrency = 'Ether';
+
+    const ethPriceBN = toBN(ethPrice.toFixed(0));
+    const balanceETH = fromWei(balance);
+    const balanceUSD = fromWei(toBN(balance).mul(ethPriceBN));
+
     const isValidAddress = address && isAddress(address);
     const ethPriceRounded = Math.round(ethPrice * 100) / 100;
-    const balanceUSD = balance ? (parseFloat(fromWei(balance)) * ethPrice).toFixed(2) : '0.0';
     return isValidAddress ? (
         <Row>
-            <Col xs="12" md="3">
+            {/*<Col xs="12" md="3">
                 <AccountDetailsCard>
-                    {/*
+
                                 <div>First balance change</div>
                                 <div>Received {firstBalanceChange} ago</div>
                                 <div>Last balance change</div>
                                 <div>Sent {lastBalanceChange} ago</div>
-                                */}
+
                     <div>Transaction count</div>
                     <div>{nonce}</div>
                 </AccountDetailsCard>
-            </Col>
+            </Col>*/}
             <Col xs="12" md="6">
                 <CurrencyDetailsCard>
                     <AddressBar address={address} title={isContract ? 'Contract' : 'Address'} hasQR />
-                    <div>
+                    {/*<div>
                         <Metascan />
                         <a href="/">View address on other chains</a>
-                    </div>
+                            </div>*/}
                     <div className="flex">
                         <span>Balance</span>
-                        <span>{balance ? fromWei(balance) : '0'} ETH</span>
+                        <span>
+                            {balanceETH} {networkCurrency}
+                        </span>
                     </div>
                     <div className="flex">
-                        <span>Ether Value</span>
+                        <span>{networkCurrency} Value</span>
                         <span>
                             {balanceUSD} USD (@ ${ethPriceRounded}/ETH)
                         </span>
                     </div>
+                    <div className="flex">
+                        <span>Nonce</span>
+                        <span>{nonce}</span>
+                    </div>
                     <TokenDropDown networkId={networkId} accountAddress={address} />
                 </CurrencyDetailsCard>
             </Col>
-            <Col xs="12" md="3">
+            {/*<Col xs="12" md="3">
                 <AccountDetailsCard>
                     <div>More Info</div>
                     <div>
@@ -69,7 +81,7 @@ export const AccountInfoRow = ({
                         <a href="/login">Login</a>
                     </div>
                 </AccountDetailsCard>
-            </Col>
+            </Col>*/}
         </Row>
     ) : (
         <div>Invalid Ethereum Address</div>

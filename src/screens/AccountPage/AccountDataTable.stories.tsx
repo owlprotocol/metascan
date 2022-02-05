@@ -1,27 +1,22 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import Web3 from 'web3';
-import { Network } from '@owlprotocol/web3-redux';
-import { MAINNET_RPC } from '@owlprotocol/web3-redux/environment';
-import { networkIdArgType, addressArgType, routeHashArgType } from '../../test/storybookArgs';
-import { withThemeProvider, withStoreProvider, withMockData, withRouteHashAsProp } from '../../hoc';
-import { AccountDataTable } from './AccountDataTable';
+import { actionsCreateNetwork } from '../../test/data';
+import { networkIdArgType, addressArgType, locationHashArgType } from '../../test/storybookArgs';
+import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
+import { AccountDataTable, AccountDataTableProps } from './AccountDataTable';
 
-const network: Network.Network = { networkId: '1', web3: new Web3(MAINNET_RPC) };
-const actions = [Network.create(network)];
-
-const Wrapper = withThemeProvider(withStoreProvider(withMockData(withRouteHashAsProp(AccountDataTable), actions)));
+const Wrapper = withThemeProvider(withStoreProvider(withMockData(AccountDataTable, actionsCreateNetwork)));
 const Template: ComponentStory<typeof AccountDataTable> = (args: any) => <Wrapper {...args} />;
 export const Main = Template.bind({});
-const Args = {
+const Args: AccountDataTableProps = {
     networkId: networkIdArgType.options[0],
     address: addressArgType.options[0],
-    hash: routeHashArgType.options[0],
+    locationHash: locationHashArgType.options[0] as '#transactions',
 };
 Main.args = Args;
 Main.argTypes = {
     networkId: networkIdArgType,
     address: addressArgType,
-    hash: routeHashArgType,
+    locationHash: locationHashArgType,
 };
 
 export default {
