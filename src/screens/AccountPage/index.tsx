@@ -1,4 +1,5 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import composeHooks from 'react-hooks-compose';
 import { useGetNonce, useGetBalance } from '@owlprotocol/web3-redux/contract/hooks';
@@ -13,13 +14,19 @@ export interface Props {
     networkId: string;
     address: string;
 }
-export const useAccountPage = ({ networkId, address }: Props): PresenterProps => {
+export const useAccountPage = ({ networkId, address }: Props) => {
+    const history = useHistory();
     const ethPrice = useEthPrice();
     const nonce = useGetNonce(networkId, address);
     const balance = useGetBalance(networkId, address);
     const { hash } = useLocation();
 
-    return { networkId, address, nonce, balance, ethPrice, locationHash: (hash as any) ?? '#transactions' };
+    //Default to #transactions
+    useEffect(() => {
+        if (hash != '#transactions' && hash != '#code') history.replace('#transactions');
+    }, [history, hash]);
+
+    return { nonce, balance, ethPrice, locationHash: (hash as any) ?? '#transactions' };
 };
 
 export interface PresenterProps {
@@ -62,6 +69,8 @@ export const AccountPagePresenter = ({
 
 export const AccountPage = composeHooks((props: Props) => ({
     useAccountPage: () => useAccountPage(props),
-}))(AccountPagePresenter) as () => JSX.Element;
+}))(AccountPagePresenter) as (props: Props) => JSX.Element;
+//@ts-expect-error
+AccountPage.displayName = 'AccountPage';
 
 export default AccountPage;

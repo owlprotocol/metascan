@@ -9,7 +9,6 @@ export const GradBorderWrapper = styled.div`
 `;
 
 export const Wrapper = styled.div`
-    border-radius: 10px;
     display: flex;
     align-items: center;
     width: 101%;
@@ -48,6 +47,6 @@ export const Wrapper = styled.div`
         width: 100%;
         padding: 0 0 0 12px;
         border: 0;
-        border-left: 1px solid #2091f9;
+        border-radius: 10px;
     }
 `;

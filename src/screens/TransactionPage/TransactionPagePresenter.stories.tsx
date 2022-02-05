@@ -12,7 +12,7 @@ export const Main = Template.bind({});
 
 const Args: PresenterProps = {
     hash: transactionHashArgType.options[0],
-    valueWei: '1',
+    value: '1',
     gasPrice: '1',
     gasUsed: 20000,
     blockNumber: 1,

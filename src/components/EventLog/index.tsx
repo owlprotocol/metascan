@@ -113,7 +113,7 @@ const EventLog = ({ accountAddr }: any) => {
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (
-                                                    <Link to={`/txn/${item.transactionHash}`}>
+                                                    <Link to={`/tx/${item.transactionHash}`}>
                                                         {tableData(item, label)}
                                                     </Link>
                                                 ),

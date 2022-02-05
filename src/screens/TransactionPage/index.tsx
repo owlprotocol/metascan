@@ -4,6 +4,7 @@ import { useBlock } from '@owlprotocol/web3-redux/block/hooks';
 import { useTransaction } from '@owlprotocol/web3-redux/transaction/hooks';
 import { fromWei, toBN } from 'web3-utils';
 import moment from 'moment';
+import { omit } from 'lodash';
 import { SearchBar, CopyToClipboard } from '../../components';
 import { ReactComponent as QuestionMarkIcon } from '../../icons/questionMark.svg';
 import { useEthPrice } from '../../hooks';
@@ -21,7 +22,8 @@ export const useTransactionPage = ({ networkId, hash }: Props) => {
     const block = useBlock(networkId, transaction?.blockNumber as number | undefined);
     const timeStamp = transaction?.timeStamp ?? block?.timestamp;
     console.debug({ timeStamp });
-    return { networkId, hash, ethPrice, timeStamp, ...transaction };
+    //Avoid override warning
+    return { ethPrice, timeStamp, ...omit(transaction, ['networkId', 'hash']) };
 };
 
 export interface PresenterProps {
@@ -231,8 +233,7 @@ export const TransactionPagePresenter = ({
 
 export const TransactionPage = composeHooks((props: Props) => ({
     useTransactionPage: () => useTransactionPage(props),
-}))(TransactionPagePresenter) as () => JSX.Element;
-
+}))(TransactionPagePresenter) as (props: Props) => JSX.Element;
 //@ts-expect-error
 TransactionPage.displayName = 'TransactionPage';
 

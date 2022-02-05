@@ -1,16 +1,11 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import Web3 from 'web3';
-import { Network } from '@owlprotocol/web3-redux';
-import { MAINNET_RPC } from '@owlprotocol/web3-redux/environment';
 import { transactionHashArgType } from '../../test/storybookArgs';
+import { actionsCreateNetwork } from '../../test/data';
 
 import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
 import { TransactionInfoRow, TransactionInfoRowProps } from './TransactionInfoRow';
 
-const network: Network.Network = { networkId: '1', web3: new Web3(MAINNET_RPC) };
-const actions = [Network.create(network)];
-
-const Wrapper = withThemeProvider(withStoreProvider(withMockData(TransactionInfoRow, actions)));
+const Wrapper = withThemeProvider(withStoreProvider(withMockData(TransactionInfoRow, actionsCreateNetwork)));
 const Template: ComponentStory<typeof TransactionInfoRow> = (args: any) => <Wrapper {...args} />;
 export const Main = Template.bind({});
 const Args: TransactionInfoRowProps = {

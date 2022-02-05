@@ -122,10 +122,10 @@ const TokenTxnsTable = ({ data, ERC721 }: Props) => {
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (
-                                                    <Link to={`/txn/${item.hash}`}>{tableData(item, label)}</Link>
+                                                    <Link to={`/tx/${item.hash}`}>{tableData(item, label)}</Link>
                                                 ),
-                                                from: <Link to={`/txn/${item.from}`}>{tableData(item, label)}</Link>,
-                                                to: <Link to={`/txn/${item.to}`}>{tableData(item, label)}</Link>,
+                                                from: <Link to={`/tx/${item.from}`}>{tableData(item, label)}</Link>,
+                                                to: <Link to={`/tx/${item.to}`}>{tableData(item, label)}</Link>,
                                                 'token ID': <Link to={'/???'}>{tableData(item, label)}</Link>,
                                                 token: <Link to={'/???'}>{tableData(item, label)}</Link>,
                                             }[label] || tableData(item, label)}

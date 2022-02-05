@@ -39,7 +39,7 @@ export const TransactionRowPresenter = ({ hash, method, blockNumber, from, to, v
         <tr key={hash}>
             <th scope="row" key="hash">
                 <RowContainer>
-                    <Link to={`/txn/${hash}`}>{shortenHash(hash)}</Link>
+                    <Link to={`/tx/${hash}`}>{shortenHash(hash)}</Link>
                 </RowContainer>
             </th>
             <th scope="row" key="method">
@@ -76,5 +76,7 @@ export const TransactionRowPresenter = ({ hash, method, blockNumber, from, to, v
 export const TransactionRow = composeHooks((props: Props) => ({
     useTransactionRow: () => useTransactionRow(props),
 }))(TransactionRowPresenter) as (props: Props) => JSX.Element;
+//@ts-expect-error
+TransactionRow.displayName = 'TransactionRow';
 
 export default TransactionRow;

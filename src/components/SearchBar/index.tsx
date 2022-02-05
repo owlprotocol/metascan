@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import composeHooks from 'react-hooks-compose';
 import { getSearchUrlWithTerm } from '../../utils/searchUtils';
@@ -11,19 +11,18 @@ const useSearchBarHook = () => {
     const history = useHistory();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleInputKeyPress = (event: any) => {
-        if (event.which === 13) {
-            setSearchTerm('');
-            submitSearch();
-        }
-    };
-
-    const submitSearch = () => {
+    const submitSearch = useCallback(() => {
         if (!searchTerm) return;
-
         const searchUrlWithTerm = getSearchUrlWithTerm(searchTerm);
         history.push(searchUrlWithTerm);
-    };
+    }, [history, searchTerm]);
+
+    const handleInputKeyPress = useCallback(
+        (event: any) => {
+            if (event.which === 13) submitSearch();
+        },
+        [submitSearch],
+    );
 
     return {
         searchTerm,
@@ -35,15 +34,15 @@ const useSearchBarHook = () => {
 
 export interface PresenterProps {
     searchTerm?: string;
-    setSearchTerm?: (t: any) => undefined;
-    submitSearch?: (t: any) => undefined;
-    handleInputKeyPress?: (t: any) => undefined;
+    setSearchTerm?: (t: any) => any;
+    submitSearch?: (t: any) => any;
+    handleInputKeyPress?: (t: any) => any;
 }
 
-const SearchBarPresenter = ({
+export const SearchBarPresenter = ({
     searchTerm,
-    setSearchTerm = (t) => t,
-    submitSearch,
+    setSearchTerm = (t) => console.debug(`Set search ${t}`),
+    submitSearch = (t) => console.debug(`Submit ${t}`),
     handleInputKeyPress,
 }: PresenterProps) => {
     return (

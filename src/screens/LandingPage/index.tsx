@@ -1,20 +1,6 @@
-import { SearchBar, TokenCard } from '../../components';
-import { NavLink } from 'react-router-dom';
-import { Container, Row } from 'reactstrap';
-import { ReactComponent as ArrowRightIcon } from '../../icons/arrowRight.svg';
-import { NAV_LINKS, STUB_TOKEN_LIST } from '../../constants';
-import {
-    Wrapper,
-    HeroWrapper,
-    SmallTitle,
-    Headline,
-    SubText,
-    SearchBarWrapper,
-    Navigation,
-    SectionWrapper,
-    SectionHeader,
-    TokenListWrapper,
-} from './styles';
+import { SearchBar } from '../../components';
+import { Container } from 'reactstrap';
+import { Wrapper, HeroWrapper, SmallTitle, Headline, SubText, SearchBarWrapper } from './styles';
 
 const LandingPage = () => {
     return (
@@ -23,8 +9,8 @@ const LandingPage = () => {
                 <div>
                     <SmallTitle>metascan</SmallTitle>
                     <Headline>
-                        Blockchain explorers <br />
-                        <span>analytics and more</span>
+                        Blockchain Explorer <br />
+                        <span>& Analytics </span>
                     </Headline>
                     <SubText>A universal EVM blockchain explorer</SubText>
                 </div>
@@ -36,7 +22,7 @@ const LandingPage = () => {
                 </div>
             </HeroWrapper>
             <Container fluid>
-                <Navigation>
+                {/*<Navigation>
                     {NAV_LINKS.map((link, key) => (
                         <NavLink to={link.href} key={key}>
                             {link.label}
@@ -74,6 +60,7 @@ const LandingPage = () => {
                         <TokenCard token="sol" />
                     </TokenListWrapper>
                 </SectionWrapper>
+                */}
             </Container>
         </Wrapper>
     );
