@@ -6,3 +6,4 @@ export { DetailButton } from './DetailButton';
 export { ETH } from './ETH';
 export { Metascan } from './Metascan';
 export { QR } from './QR';
+export { Search } from './Search';
