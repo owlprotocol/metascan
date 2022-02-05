@@ -24,7 +24,7 @@ export const TransactionsTable = ({ networkId, address }: Props) => {
                         <th>{'txn hash'}</th>
                         <th>{'method'}</th>
                         <th>{'block'}</th>
-                        <th>{'age'}</th>
+                        {/*<th>{'age'}</th>*/}
                         <th>{'from'}</th>
                         <th>{'to'}</th>
                         <th>{'value'}</th>

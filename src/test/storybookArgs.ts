@@ -1,4 +1,4 @@
-import { ADDRESS_0, WETH } from './data';
+import { ADDRESS_0, WETH, VULCAN_OCR } from './data';
 
 export const networkIdArgType = {
     options: ['1'],
@@ -8,6 +8,7 @@ export const networkIdArgType = {
 const addressLabels = {
     [ADDRESS_0]: `ZERO - ${ADDRESS_0}`,
     [WETH]: `WETH - ${WETH}`,
+    [VULCAN_OCR]: `VULCAN - ${VULCAN_OCR}`,
 };
 export const addressArgType = {
     options: Object.keys(addressLabels),

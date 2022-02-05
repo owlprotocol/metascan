@@ -15,13 +15,13 @@ export const useTransactionRow = ({ networkId, hash }: Props) => {
 
     //TODO
     const method = hash.substring(0, 6);
-    const age = 'placeholder';
+    //const age = 'placeholder';
 
     //TODO: gasUsed ?
     const gas = transaction?.gas ? toBN(transaction.gas) : toBN(0);
     const gasPrice = transaction?.gasPrice ? toBN(transaction.gasPrice) : toBN(0);
     const fee = fromWei(gas.mul(gasPrice));
-    return { hash, method, blockNumber, from, to, value, age, fee };
+    return { hash, method, blockNumber, from, to, value, fee };
 };
 
 //['hash', 'method', 'blockNumber', 'age', 'from', 'to', 'value', 'fee'];
@@ -29,13 +29,12 @@ export interface PresenterProps {
     hash: string;
     method: string;
     blockNumber: number;
-    age: string;
     from: string;
     to: string;
     value: string;
     fee: string;
 }
-export const TransactionRowPresenter = ({ hash, method, blockNumber, age, from, to, value, fee }: PresenterProps) => {
+export const TransactionRowPresenter = ({ hash, method, blockNumber, from, to, value, fee }: PresenterProps) => {
     return (
         <tr key={hash}>
             <th scope="row" key="hash">
@@ -51,9 +50,9 @@ export const TransactionRowPresenter = ({ hash, method, blockNumber, age, from, 
                     <Link to={`/block/${blockNumber}`}>{blockNumber}</Link>
                 </RowContainer>
             </th>
-            <th scope="row" key="age">
+            {/*<th scope="row" key="age">
                 <RowContainer>{age}</RowContainer>
-            </th>
+            </th>*/}
             <th scope="row" key="from">
                 <RowContainer>
                     <Link to={`/address/${from}`}>{from}</Link>

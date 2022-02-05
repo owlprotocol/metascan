@@ -29,7 +29,7 @@ export const AccountInfoRow = ({
 
     const ethPriceBN = toBN(ethPrice.toFixed(0));
     const balanceETH = fromWei(balance);
-    const balanceUSD = fromWei(toBN(balance).mul(ethPriceBN));
+    const balanceUSD = parseFloat(fromWei(toBN(balance).mul(ethPriceBN))).toFixed(2);
 
     const isValidAddress = address && isAddress(address);
     const ethPriceRounded = Math.round(ethPrice * 100) / 100;
@@ -47,9 +47,9 @@ export const AccountInfoRow = ({
                     <div>{nonce}</div>
                 </AccountDetailsCard>
             </Col>*/}
-            <Col xs="12" md="6">
+            <Col xs="12" md="12">
                 <CurrencyDetailsCard>
-                    <AddressBar address={address} title={isContract ? 'Contract' : 'Address'} hasQR />
+                    <AddressBar address={address} title={isContract ? 'Contract' : 'Address'} />
                     {/*<div>
                         <Metascan />
                         <a href="/">View address on other chains</a>
@@ -61,7 +61,7 @@ export const AccountInfoRow = ({
                         </span>
                     </div>
                     <div className="flex">
-                        <span>{networkCurrency} Value</span>
+                        <span>Value</span>
                         <span>
                             {balanceUSD} USD (@ ${ethPriceRounded}/ETH)
                         </span>
