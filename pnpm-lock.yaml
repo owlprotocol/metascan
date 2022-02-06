@@ -19,6 +19,7 @@ specifiers:
   '@testing-library/react-hooks': ^7.0.1
   '@testing-library/user-event': ^13.2.1
   '@types/jest': ^26.0.24
+  '@types/lodash': ^4.14.178
   '@types/node': ^16.4.13
   '@types/react': 17.0.2
   '@types/react-dom': 17.0.2
@@ -122,6 +123,7 @@ devDependencies:
   '@testing-library/react-hooks': 7.0.2_react-dom@17.0.2+react@17.0.2
   '@testing-library/user-event': 13.5.0
   '@types/jest': 26.0.24
+  '@types/lodash': 4.14.178
   '@types/node': 16.11.22
   '@types/react': 17.0.2
   '@types/react-dom': 17.0.2
@@ -4594,6 +4596,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
+
+  /@types/lodash/4.14.178:
+    resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
+    dev: true
 
   /@types/markdown-to-jsx/6.11.3:
     resolution: {integrity: sha512-30nFYpceM/ZEvhGiqWjm5quLUxNeld0HCzJEXMZZDpq53FPkS85mTwkWtCXzCqq8s5JYLgM5W392a02xn8Bdaw==}
