@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Web3 from 'web3';
-import { useDispatch } from 'react-redux';
-
-import { MAINNET_RPC } from '@owlprotocol/web3-redux/environment';
+import { useDispatch, useSelector } from 'react-redux';
 import { Network } from '@owlprotocol/web3-redux';
 
 import LayoutWrapper from './layout';
@@ -15,9 +12,14 @@ import { THEME_COLORS } from './constants';
 
 function App() {
     const dispatch = useDispatch();
+    const network = useSelector((state) => Network.selectByIdSingle(state, '1'));
+    const networkExists = !!network;
+
     useEffect(() => {
-        dispatch(Network.create({ networkId: '1', web3: new Web3(MAINNET_RPC!) }));
-    }, [dispatch]);
+        if (!networkExists) {
+            dispatch(Network.create({ networkId: '1' }));
+        }
+    }, [dispatch, networkExists]);
 
     //ReactGA.initialize('UA-000000-01');
     //ReactGA.pageview(window.location.pathname + window.location.search);

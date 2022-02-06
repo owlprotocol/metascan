@@ -2,15 +2,18 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-//import store from './store/store';
-import store from '@owlprotocol/web3-redux/store';
+import { createStoreWithPersistor } from '@owlprotocol/web3-redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
+const { store, persistor } = createStoreWithPersistor();
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor!}>
+            <App />
+        </PersistGate>
     </Provider>,
     document.getElementById('root'),
 );

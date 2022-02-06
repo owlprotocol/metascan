@@ -21,7 +21,7 @@ export const useTransactionRow = ({ networkId, hash }: Props) => {
     const gas = transaction?.gas ? toBN(transaction.gas) : toBN(0);
     const gasPrice = transaction?.gasPrice ? toBN(transaction.gasPrice) : toBN(0);
     const fee = fromWei(gas.mul(gasPrice));
-    return { hash, method, blockNumber, from, to, value, fee };
+    return { method, blockNumber, from, to, value, fee };
 };
 
 //['hash', 'method', 'blockNumber', 'age', 'from', 'to', 'value', 'fee'];

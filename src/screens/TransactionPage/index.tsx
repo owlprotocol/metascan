@@ -21,7 +21,6 @@ export const useTransactionPage = ({ networkId, hash }: Props) => {
     const transaction = useTransaction(networkId, hash);
     const block = useBlock(networkId, transaction?.blockNumber as number | undefined);
     const timeStamp = transaction?.timeStamp ?? block?.timestamp;
-    console.debug({ timeStamp });
     //Avoid override warning
     return { ethPrice, timeStamp, ...omit(transaction, ['networkId', 'hash']) };
 };
