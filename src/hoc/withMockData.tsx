@@ -9,7 +9,6 @@ export const withMockData = (WrappedComponent: any, actions: AnyAction[]) => {
         useEffect(() => {
             //Dispatch mock data here
             actions.forEach((a) => {
-                console.debug(a);
                 dispatch(a);
             });
         }, [dispatch]);
