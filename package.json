@@ -24,7 +24,7 @@
         "prepare": "husky install"
     },
     "dependencies": {
-        "@owlprotocol/web3-redux": "0.1.9-beta.2",
+        "@owlprotocol/web3-redux": "0.1.9-beta.3",
         "axios": "0.25.0",
         "bootstrap": "^5.1.3",
         "copy-to-clipboard": "^3.3.1",
@@ -82,7 +82,6 @@
         "@types/styled-components": "^5.1.17",
         "@typescript-eslint/eslint-plugin": "^4.29.0",
         "@typescript-eslint/parser": "^4.29.0",
-        "chai": "^4.3.4",
         "cross-env": "^7.0.3",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
@@ -90,7 +89,6 @@
         "eslint-plugin-prettier": "^3.4.0",
         "eslint-plugin-react": "^7.24.0",
         "eslint-plugin-react-hooks": "^4.2.0",
-        "ganache-core": "2.13.2",
         "gh-pages": "^3.1.0",
         "husky": "^7.0.2",
         "jest": "27.0.6",
