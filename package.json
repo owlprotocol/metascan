@@ -48,21 +48,22 @@
         "reselect": "^4.1.5",
         "sass-loader": "^12.4.0",
         "styled-components": "^5.3.3",
-        "web3": "^1.6.1",
-        "web3-utils": "^1.6.1"
+        "web3": "1.7.0",
+        "web3-utils": "1.7.0",
+        "web3-core": "1.7.0"
     },
     "devDependencies": {
         "@babel/core": "^7.15.8",
         "@babel/preset-env": "^7.15.8",
         "@babel/preset-react": "^7.14.5",
-        "@storybook/addon-actions": "^6.3.6",
-        "@storybook/addon-docs": "^6.3.6",
-        "@storybook/addon-essentials": "^6.3.6",
-        "@storybook/addon-links": "^6.3.6",
-        "@storybook/node-logger": "^6.3.6",
+        "@storybook/addon-actions": "6.4.19",
+        "@storybook/addon-docs": "6.4.19",
+        "@storybook/addon-essentials": "6.4.19",
+        "@storybook/addon-links": "6.4.19",
+        "@storybook/node-logger": "6.4.19",
         "@storybook/preset-create-react-app": "^3.2.0",
         "@storybook/preset-scss": "^1.0.3",
-        "@storybook/react": "6.3.6",
+        "@storybook/react": "6.4.19",
         "@svgr/webpack": "^5.5.0",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.0.0",
@@ -75,7 +76,7 @@
         "@types/react-router-dom": "5.1.6",
         "@types/redux-orm": "^0.16.1",
         "@types/reselect": "^2.2.0",
-        "@types/styled-components": "^5.1.17",
+        "@types/styled-components": "5.1.20",
         "@typescript-eslint/eslint-plugin": "^4.29.0",
         "@typescript-eslint/parser": "^4.29.0",
         "cross-env": "^7.0.3",
@@ -91,8 +92,7 @@
         "lint-staged": "^11.1.2",
         "prettier": "^2.3.2",
         "typescript": "4.4.4",
-        "web3-core": "^1.6.1",
-        "webpack": "^4.46.0"
+        "webpack": "4.46.0"
     },
     "browserslist": {
         "production": [
