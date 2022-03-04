@@ -1,23 +1,23 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { withThemeProvider } from '../../hoc';
-import AccountPage from '.';
+import { actionsCreateNetwork } from '../../test/data';
+import { networkIdArgType, addressArgType } from '../../test/storybookArgs';
+import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
+import { AccountPage, Props } from '.';
 
-const Wrapper = withThemeProvider((props: any) => {
-    return <AccountPage {...props} />;
-});
+const Wrapper = withThemeProvider(withStoreProvider(withMockData(AccountPage, actionsCreateNetwork)));
+const Template: ComponentStory<typeof AccountPage> = (args: any) => <Wrapper {...args} />;
+export const Main = Template.bind({});
+const Args: Props = {
+    networkId: networkIdArgType.options[0],
+    address: addressArgType.options[0],
+};
+Main.args = Args;
+Main.argTypes = {
+    networkId: networkIdArgType,
+    address: addressArgType,
+};
 
 export default {
-    title: 'Screens/AccountPage',
+    title: 'Account/AccountPage',
     component: AccountPage,
 } as ComponentMeta<typeof AccountPage>;
-
-const Template: ComponentStory<typeof AccountPage> = (args: any) => <Wrapper {...args} />;
-
-export const Main = Template.bind({});
-
-Main.args = {
-    firstBalanceChange: '3 months',
-    lastBalanceChange: '1 day',
-    txs: '3,742',
-    address: '0x63CD72389dc25DaF9A5c5016a4a6487d7471Ce73',
-};

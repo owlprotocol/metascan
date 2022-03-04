@@ -1,4 +1,4 @@
-import { useFetchEvents, useNetworkCreate, EventSignature } from '../../hooks';
+import { useFetchEvents, EventSignature } from '../../hooks';
 import { Table as ReactstrapTable } from 'reactstrap';
 import { shortenHash } from '../../utils';
 import styled from 'styled-components';
@@ -91,7 +91,6 @@ const EventLog = ({ accountAddr }: any) => {
         return data;
     };
 
-    useNetworkCreate();
     const eventLogs = useFetchEvents(accountAddr);
     return (
         <Wrapper>
@@ -113,7 +112,7 @@ const EventLog = ({ accountAddr }: any) => {
                                         <BlockItemHeadContainer className={label === 'method' ? 'method' : ''}>
                                             {{
                                                 'txn hash': (
-                                                    <Link to={`/txn/${item.transactionHash}`}>
+                                                    <Link to={`/tx/${item.transactionHash}`}>
                                                         {tableData(item, label)}
                                                     </Link>
                                                 ),

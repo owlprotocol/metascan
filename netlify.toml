@@ -1,5 +1,0 @@
-[build.environment]
-  NODE_VERSION = "14.17"
-  NPM_FLAGS = "--max-old-space-size=4096 --force --legacy-peer-deps"
-  NODE_ENV = "development"
-

@@ -1,20 +1,23 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { withThemeProvider } from '../../hoc';
-import ContractCode from '.';
+import { actionsCreateNetwork } from '../../test/data';
+import { networkIdArgType, addressArgType } from '../../test/storybookArgs';
+import { withThemeProvider, withStoreProvider, withMockData } from '../../hoc';
+import { ContractCode, Props } from '.';
 
-const Wrapper = withThemeProvider((props: any) => {
-    return <ContractCode {...props} />;
-});
+const Wrapper = withThemeProvider(withStoreProvider(withMockData(ContractCode, actionsCreateNetwork)));
+const Template: ComponentStory<typeof ContractCode> = (args: any) => <Wrapper {...args} />;
+export const Main = Template.bind({});
+const Args: Props = {
+    networkId: networkIdArgType.options[0],
+    address: addressArgType.options[0],
+};
+Main.args = Args;
+Main.argTypes = {
+    networkId: networkIdArgType,
+    address: addressArgType,
+};
 
 export default {
-    title: 'Generic/ContractCode',
+    title: 'Contract/ContractCode',
     component: ContractCode,
 } as ComponentMeta<typeof ContractCode>;
-
-const Template: ComponentStory<typeof ContractCode> = (args: any) => <Wrapper {...args} />;
-
-export const Main = Template.bind({});
-
-Main.args = {
-    bytecode: '0xff01024812309098a6ef98a6f896b89fea69bf6ae0bf89',
-};

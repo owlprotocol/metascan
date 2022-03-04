@@ -14,7 +14,10 @@ module.exports = {
             }
         }
     ],
-    "webpack": async config => {
+    //https://storybook.js.org/docs/react/configure/webpack#extending-storybooks-webpack-config
+    webpackFinal: async (config, { configType }) => {
+        // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
+        config.node = { ...(config.node ?? {}), fs: 'empty' } //https://github.com/motdotla/dotenv/issues/233
         config.module.rules.push(
             {
                 test: /\.svg$/,

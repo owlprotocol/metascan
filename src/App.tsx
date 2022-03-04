@@ -1,16 +1,28 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Network } from '@owlprotocol/web3-redux';
+
 import LayoutWrapper from './layout';
-import { LandingPage, BlocksPage, AccountPage, TransactionPage, ErrorPage } from './screens';
+import { LandingPage, AccountPage, TransactionPage, ErrorPage } from './screens';
 import { ThemeProvider } from 'styled-components';
 import { THEME_COLORS } from './constants';
-import { useNetworkCreate } from './hooks/index';
 
 //import ReactGA from 'react-ga';
 
 function App() {
+    const dispatch = useDispatch();
+    const network = useSelector((state) => Network.selectByIdSingle(state, '1'));
+    const networkExists = !!network;
+
+    useEffect(() => {
+        if (!networkExists) {
+            dispatch(Network.create({ networkId: '1' }));
+        }
+    }, [dispatch, networkExists]);
+
     //ReactGA.initialize('UA-000000-01');
     //ReactGA.pageview(window.location.pathname + window.location.search);
-    useNetworkCreate();
 
     return (
         <div className="App">
@@ -18,22 +30,23 @@ function App() {
                 <Router>
                     <Switch>
                         <LayoutWrapper>
-                            {/* @ts-ignore */}
                             <Route exact={true} path="/">
                                 <LandingPage />
                             </Route>
+                            <Route
+                                path="/address/:address"
+                                render={({ match }) => <AccountPage networkId="1" address={match.params.address} />}
+                            />
+                            <Route
+                                path="/tx/:hash"
+                                render={({ match }) => <TransactionPage networkId="1" hash={match.params.hash} />}
+                            />
+                            {/*<Route path="/block/:blockNumber">
+                                <BlocksPage />
+                            </Route>
                             <Route path="/blocks">
                                 <BlocksPage />
-                            </Route>
-                            <Route path="/address/:accountAddr">
-                                <AccountPage />
-                            </Route>
-                            <Route path="/txn/:txnHash">
-                                <TransactionPage />
-                            </Route>
-                            <Route path="/block/:blockNumber">
-                                <BlocksPage />
-                            </Route>
+                            </Route>*/}
                             <Route path="/error">
                                 <ErrorPage />
                             </Route>

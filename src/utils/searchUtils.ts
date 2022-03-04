@@ -6,7 +6,7 @@ export const getSearchUrlWithTerm = (searchTerm: string) => {
     if (validateBlockNumber(searchTerm)) {
         return `/block/${searchTerm}/`;
     } else if (validateTransactionHash(searchTerm)) {
-        return `/txn/${searchTerm}`;
+        return `/tx/${searchTerm}`;
     } else if (validateAddress(searchTerm)) {
         return `/address/${searchTerm}/`;
     } else {

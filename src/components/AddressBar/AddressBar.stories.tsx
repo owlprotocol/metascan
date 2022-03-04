@@ -7,7 +7,7 @@ const Wrapper = withThemeProvider((props: any) => {
 });
 
 export default {
-    title: 'Generic/SearchBar',
+    title: 'Generic/AddressBar',
     component: SearchBar,
 } as ComponentMeta<typeof SearchBar>;
 

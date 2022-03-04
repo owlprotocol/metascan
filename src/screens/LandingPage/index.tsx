@@ -1,112 +1,6 @@
-import styled from 'styled-components';
-import { SearchBar, TokenCard } from '../../components';
-import { NavLink } from 'react-router-dom';
-import { Container, Row } from 'reactstrap';
-import { ReactComponent as ArrowRightIcon } from '../../icons/arrowRight.svg';
-import { NAV_LINKS, STUB_TOKEN_LIST } from '../../constants';
-import { NavigationWrapper } from '../../styles/Common';
-
-const HeroWrapper = styled.div`
-    font-family: 'Montserrat', sans-serif;
-    background: #fafafa;
-    min-height: 700px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`;
-
-const SmallTitle = styled.div`
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 36px;
-    color: #737373;
-    text-transform: uppercase;
-`;
-
-const Headline = styled.div`
-    font-weight: 800;
-    font-size: 50px;
-    line-height: 70px;
-    letter-spacing: 0.2px;
-    color: #252b42;
-    margin: 20px 0;
-
-    span {
-        background: linear-gradient(39.97deg, #00f3b9 0.79%, #2187ff 79.29%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-`;
-
-const SubText = styled.div`
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 38px;
-    letter-spacing: 0.2px;
-    color: #737373;
-`;
-
-const SearchBarWrapper = styled.div`
-    width: 100%;
-    max-width: 930px;
-    margin: 50px auto 0;
-`;
-
-const SectionWrapper = styled.div`
-    margin: 20px auto 0;
-
-    &:not(:last-of-type) {
-        margin-bottom: 70px;
-    }
-`;
-
-const SectionHeader = styled.div`
-    font-weight: bold;
-    letter-spacing: 0.2px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 26px;
-
-    span {
-        font-size: 36px;
-        line-height: 57px;
-        color: #000000;
-    }
-
-    a {
-        font-size: 18px;
-        line-height: 28px;
-        color: #2091f9;
-        text-decoration: none;
-    }
-`;
-
-const TokenListWrapper = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 60px;
-    justify-items: center;
-    align-items: center;
-    padding: 20px 0 60px;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-
-    /* Mobile md */
-    /* grid-template-columns: repeat(2, 1fr); */
-    /* Mobile sm */
-    /* grid-template-columns: repeat(1, 1fr); */
-`;
-
-const Navigation = styled(NavigationWrapper)``;
-
-const Wrapper = styled.div``;
+import { SearchBar } from '../../components';
+import { Container } from 'reactstrap';
+import { Wrapper, HeroWrapper, SmallTitle, Headline, SubText, SearchBarWrapper } from './styles';
 
 const LandingPage = () => {
     return (
@@ -115,8 +9,8 @@ const LandingPage = () => {
                 <div>
                     <SmallTitle>metascan</SmallTitle>
                     <Headline>
-                        Blockchain explorers <br />
-                        <span>analytics and more</span>
+                        Blockchain Explorer <br />
+                        <span>& Analytics </span>
                     </Headline>
                     <SubText>A universal EVM blockchain explorer</SubText>
                 </div>
@@ -127,16 +21,14 @@ const LandingPage = () => {
                     </SearchBarWrapper>
                 </div>
             </HeroWrapper>
-
             <Container fluid>
-                <Navigation>
+                {/*<Navigation>
                     {NAV_LINKS.map((link, key) => (
                         <NavLink to={link.href} key={key}>
                             {link.label}
                         </NavLink>
                     ))}
                 </Navigation>
-
                 <Row>
                     <SectionWrapper>
                         <SectionHeader>
@@ -154,7 +46,6 @@ const LandingPage = () => {
                         </TokenListWrapper>
                     </SectionWrapper>
                 </Row>
-
                 <SectionWrapper>
                     <SectionHeader>
                         <span>Tokens</span>
@@ -163,13 +54,13 @@ const LandingPage = () => {
                             <ArrowRightIcon />
                         </NavLink>
                     </SectionHeader>
-
                     <TokenListWrapper>
                         <TokenCard token="eth" />
                         <TokenCard token="usdc" />
                         <TokenCard token="sol" />
                     </TokenListWrapper>
                 </SectionWrapper>
+                */}
             </Container>
         </Wrapper>
     );
